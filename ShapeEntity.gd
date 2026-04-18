@@ -67,8 +67,7 @@ func get_xor_shape(other_entity: ShapeEntity) -> Variant: # PackedVector2Array |
 	
 	var xor_shapes: Array[PackedVector2Array] = Geometry2D.clip_polygons(other_shape_translated_points, my_shape_translated_points)
 	if xor_shapes.size() > 0:
-		#var projected_pos_scaled = Vector2(other_entity.position.x, other_entity.position.z) * baseline_scale
-		return xor_shapes[0] #* Transform2D(0, Vector2.ONE, 0, -projected_pos_scaled)
+		return xor_shapes[0]
 	else:
 		return null
 

@@ -23,6 +23,10 @@ GameStats="*uid://k6l065k5x6la"
 
 project/assembly_name="Square Hole"
 
+[filesystem]
+
+import/blender/enabled=false
+
 [input]
 
 move_left={

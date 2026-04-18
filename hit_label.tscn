@@ -1,0 +1,7 @@
+[gd_scene format=3 uid="uid://cqqx5yicm0l24"]
+
+[node name="Label" type="Label3D" unique_id=1495655536]
+no_depth_test = true
+outline_modulate = Color(0, 0, 0, 0)
+text = "50%!"
+font_size = 64

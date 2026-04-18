@@ -2,6 +2,7 @@ extends ShapeEntity
 
 
 @export var BASE_METERS_PER_SECOND: float = 2
+@export var WEIGHT: int = 1
 
 
 # Called when the node enters the scene tree for the first time.

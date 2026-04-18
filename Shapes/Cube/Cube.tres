@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="PackedEnemy" format=3 uid="uid://ddejnxm31n0fh"]
+
+[ext_resource type="PackedScene" uid="uid://b028ugqcxa2j" path="res://Shapes/Cube/Cube.tscn" id="1_ap3gu"]
+[ext_resource type="Script" uid="uid://dvkje5eqk6kqh" path="res://PackedEnemy.gd" id="2_xylws"]
+
+[resource]
+script = ExtResource("2_xylws")
+scene = ExtResource("1_ap3gu")
+metadata/_custom_type_script = "uid://dvkje5eqk6kqh"
