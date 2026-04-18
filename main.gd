@@ -35,7 +35,7 @@ var starting_time_ticks: int
 
 const GAME_DURATION: float = 1200.0 # 20 minutes in seconds
 
-var SANITY_MULTIPLIER: float = 0.10 # in percent
+var SANITY_MULTIPLIER: float = 0.05 # in percent
 @export var sanity_penalty_curve: Curve # X: 0-1 (time over 20 min), Y: penalty multiplier
 @export_range(0.1, 1.0, 0.05) var enemy_shape_scale: float = 1.0
 @export_range(0.0, 5.0, 0.1) var magnet_radius: float = 0.2
@@ -69,15 +69,20 @@ func get_sanity_penalty_multiplier() -> float:
 
 enum SanityFormula { DEFAULT, FORGIVING }
 
-func calculate_sanity_change(score_base: float, formula: SanityFormula = SanityFormula.FORGIVING) -> float:
-	var penalty_mult: float = get_sanity_penalty_multiplier()
+func calculate_sanity_change(score_base: float, formula: SanityFormula = SanityFormula.DEFAULT) -> float:
+	var change: float
 	match formula:
 		SanityFormula.DEFAULT:
-			return (score_base - (1.0 - score_base)) * SANITY_MULTIPLIER * penalty_mult
+			change = (score_base - (1.0 - score_base)) * SANITY_MULTIPLIER
 		SanityFormula.FORGIVING:
-			return (score_base - (1.0 - score_base) * 0.5) * SANITY_MULTIPLIER * penalty_mult
+			change = (score_base - (1.0 - score_base) * 0.5) * SANITY_MULTIPLIER
 		_:
-			return 0.0
+			change = 0.0
+
+	# Only apply penalty ramp to sanity loss
+	if change < 0:
+		change *= get_sanity_penalty_multiplier()
+	return change
 
 
 # Called when the node enters the scene tree for the first time.
