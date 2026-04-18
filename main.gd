@@ -14,10 +14,6 @@ extends Node3D
 # sounds: 100% match, 0% match, 100->50% lessen pitch, 49->0% lessen pitch
 # more shapes
 
-
-# sanity meter: we could make it so a higher % match is required to not lose sanity
-# make intersection/xor shapes smoother/last longer
-
 # game over/win screen(after 20 minutes?)
 # main menu
 
