@@ -1,0 +1,12 @@
+[gd_scene format=3 uid="uid://cgegbljd314bw"]
+
+[ext_resource type="PackedScene" uid="uid://b08vphhmktfun" path="res://ShapeEntity.tscn" id="1_xhfnw"]
+
+[sub_resource type="ConvexPolygonShape2D" id="ConvexPolygonShape2D_xhfnw"]
+resource_local_to_scene = true
+points = PackedVector2Array(100, 0, 0, 0, 0, 100, 100, 100)
+
+[node name="Player" unique_id=56703870 instance=ExtResource("1_xhfnw")]
+
+[node name="CollisionShape2D" parent="." index="0" unique_id=976849342]
+shape = SubResource("ConvexPolygonShape2D_xhfnw")

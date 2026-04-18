@@ -1,0 +1,17 @@
+[gd_scene format=3 uid="uid://b08vphhmktfun"]
+
+[ext_resource type="Script" uid="uid://dl3olrjlw3k34" path="res://ShapeEntity.gd" id="1_tt7e2"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_07s5p"]
+
+[sub_resource type="ConvexPolygonShape2D" id="ConvexPolygonShape2D_r0du0"]
+resource_local_to_scene = true
+points = PackedVector2Array(100, 0, 0, 0, 0, 100, 100, 100)
+
+[node name="ShapeEntity" type="MeshInstance3D" unique_id=1738949201]
+mesh = SubResource("BoxMesh_07s5p")
+script = ExtResource("1_tt7e2")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=976849342]
+unique_name_in_owner = true
+shape = SubResource("ConvexPolygonShape2D_r0du0")

@@ -1,6 +1,58 @@
 [gd_scene format=3 uid="uid://3d31nk2ftblc"]
 
 [ext_resource type="Script" uid="uid://ukfdxoqcv7xy" path="res://main.gd" id="1_glv2v"]
+[ext_resource type="PackedScene" uid="uid://b08vphhmktfun" path="res://ShapeEntity.tscn" id="2_uu6xs"]
+[ext_resource type="PackedScene" uid="uid://cgegbljd314bw" path="res://Player.tscn" id="3_r0du0"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_uu6xs"]
+albedo_color = Color(0.62967473, 0.62967473, 0.6296747, 1)
+albedo_texture_force_srgb = true
+uv1_triplanar = true
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_r0du0"]
+albedo_color = Color(0.9966598, 0.34354967, 1, 1)
+
+[sub_resource type="Environment" id="Environment_r0du0"]
 
 [node name="Main" type="Node3D" unique_id=222001452]
 script = ExtResource("1_glv2v")
+
+[node name="Pivot" type="Node3D" parent="." unique_id=556041694]
+
+[node name="Camera3D" type="Camera3D" parent="Pivot" unique_id=2095369003]
+transform = Transform3D(0.7071068, -0.29867962, 0.6409294, 0, 0.90641105, 0.42239675, -0.7071068, -0.2986796, 0.6409294, 6.1897984, 4.796956, 6.076603)
+fov = 35.0
+
+[node name="CSGBox3D" type="CSGBox3D" parent="." unique_id=886165375]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.561035, 0, 0)
+size = Vector3(40, 1, 40)
+material = SubResource("StandardMaterial3D_uu6xs")
+
+[node name="Player" parent="." unique_id=1842404196 instance=ExtResource("3_r0du0")]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 0.19, 0)
+material_override = SubResource("StandardMaterial3D_r0du0")
+
+[node name="Enemy" parent="." unique_id=56703870 instance=ExtResource("2_uu6xs")]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.067772, 0)
+
+[node name="SunPivot" type="Node3D" parent="." unique_id=1284798189]
+transform = Transform3D(0.89249134, 0, -0.45106447, 0, 1, 0, 0.45106447, 0, 0.89249134, 0, 0, 0)
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="SunPivot" unique_id=1404500661]
+transform = Transform3D(-0.74431163, -0.66783255, -2.9191886e-08, 0, -4.3711392e-08, 1, -0.66783255, 0.74431163, 3.2534892e-08, 0, 20.526173, 0)
+shadow_enabled = true
+
+[node name="DirectionalLight3D2" type="DirectionalLight3D" parent="SunPivot" unique_id=421280350]
+transform = Transform3D(-0.7443116, 0.6678325, -2.9191886e-08, 0, -4.371139e-08, -1, -0.6678325, -0.7443116, 3.2534892e-08, 0, 20.526173, 0)
+visible = false
+shadow_enabled = true
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=381813496]
+environment = SubResource("Environment_r0du0")
+
+[node name="CSGBox3D3" type="CSGBox3D" parent="." unique_id=59922468]
+
+[node name="CSGCombiner3D" type="CSGCombiner3D" parent="." unique_id=576270725]
+operation = 1
