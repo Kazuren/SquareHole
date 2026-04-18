@@ -1,12 +1,17 @@
 [gd_scene format=3 uid="uid://cgegbljd314bw"]
 
 [ext_resource type="PackedScene" uid="uid://b08vphhmktfun" path="res://ShapeEntity.tscn" id="1_xhfnw"]
+[ext_resource type="Script" uid="uid://bksw4nu15jtkw" path="res://player.gd" id="2_kpjcp"]
 
 [sub_resource type="ConvexPolygonShape2D" id="ConvexPolygonShape2D_xhfnw"]
 resource_local_to_scene = true
-points = PackedVector2Array(100, 0, 0, 0, 0, 100, 100, 100)
+points = PackedVector2Array(50, -50, -50, -50, -50, 50, 50, 50)
 
 [node name="Player" unique_id=56703870 instance=ExtResource("1_xhfnw")]
+sorting_offset = 10.0
+script = ExtResource("2_kpjcp")
+PLAYER_WALK_SPEED_PER_SECOND = 3.0
+PLAYER_RUN_SPEED_PER_SECOND = 5.0
 
 [node name="CollisionShape2D" parent="." index="0" unique_id=976849342]
 shape = SubResource("ConvexPolygonShape2D_xhfnw")
