@@ -4,6 +4,8 @@ extends ShapeEntity
 @export var PLAYER_WALK_SPEED_PER_SECOND: float = 1.0
 @export var PLAYER_RUN_SPEED_PER_SECOND: float = 5.0
 
+var is_moving: bool = false
+
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -14,7 +16,10 @@ func _process(delta: float) -> void:
 	var input_vector: Vector2 = Input.get_vector("move_left", "move_right", "move_down", "move_up")
 
 	if input_vector.is_zero_approx():
+		is_moving = false
 		return
+
+	is_moving = true
 
 	var running: bool = Input.is_action_pressed("run")
 

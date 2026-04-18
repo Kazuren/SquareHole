@@ -5,6 +5,11 @@ extends MeshInstance3D
 const baseline_scale: int = 100
 const baseline_vector: Vector2 = Vector2(100, 100)
 
+var shape_scale: float = 1.0:
+	set(value):
+		shape_scale = value
+		self.scale = Vector3.ONE * shape_scale
+
 @onready var collisionShape2D: CollisionShape2D = $%CollisionShape2D
 
 
@@ -37,8 +42,9 @@ static func get_area_2d_of(mesh_vertices: PackedVector2Array) -> float:
 func get_translated_vectorarray() -> PackedVector2Array:
 	var projected_pos_scaled = Vector2(self.position.x, self.position.z) * baseline_scale
 	return self.get_points_2d() \
+		* Transform2D(0, Vector2.ONE * shape_scale, 0, Vector2.ZERO) \
 		* Transform2D(0, Vector2.ONE, 0, -projected_pos_scaled) \
-		* Transform2D(0, Vector2.ONE / baseline_scale, 0, Vector2.ZERO) 
+		* Transform2D(0, Vector2.ONE / baseline_scale, 0, Vector2.ZERO)
 
 
 func get_intersection_shape(other_entity: ShapeEntity) -> Variant: # PackedVector2Array | NULL
@@ -80,8 +86,18 @@ func get_xor_area(other_entity: ShapeEntity) -> float:
 	return get_area_2d_of(xor_shape)
 
 
-func calculate_score_base(other_entity: ShapeEntity) -> float:
+enum ScoreFormula { LINEAR, CURVED }
+
+func calculate_score_base(other_entity: ShapeEntity, formula: ScoreFormula = ScoreFormula.CURVED) -> float:
 	var i_area = self.get_intersection_area(other_entity)
 	var x_area = self.get_xor_area(other_entity)
-	print("score:", i_area, ",", x_area)
-	return i_area / (i_area + x_area)
+
+	var raw: float = i_area / (i_area + x_area)
+
+	match formula:
+		ScoreFormula.LINEAR:
+			return raw
+		ScoreFormula.CURVED:
+			return pow(raw, 0.7)
+		_:
+			return raw

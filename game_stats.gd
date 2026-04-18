@@ -2,7 +2,7 @@ extends Node
 
 
 
-var score: float = 0
+var sanity: float = 1
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:

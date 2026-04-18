@@ -8,6 +8,7 @@ resource_local_to_scene = true
 points = PackedVector2Array(50, -50, -50, -50, -50, 50, 50, 50)
 
 [node name="Enemy" unique_id=56703870 instance=ExtResource("1_tt7e2")]
+cast_shadow = 0
 script = ExtResource("2_s7bn3")
 BASE_METERS_PER_SECOND = 2.0
 WEIGHT = 1

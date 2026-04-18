@@ -1,14 +1,19 @@
 [gd_scene format=3 uid="uid://3d31nk2ftblc"]
 
 [ext_resource type="Script" uid="uid://ukfdxoqcv7xy" path="res://main.gd" id="1_glv2v"]
-[ext_resource type="PackedScene" uid="uid://c2fglmehf860l" path="res://Enemy.tscn" id="3_cm0pq"]
-[ext_resource type="Material" uid="uid://deno8q70reo7q" path="res://XorMaterial.tres" id="3_fos0i"]
+[ext_resource type="Material" uid="uid://deno8q70reo7q" path="res://ShapeMaterials/XorMaterial.tres" id="3_fos0i"]
 [ext_resource type="PackedScene" uid="uid://cgegbljd314bw" path="res://Player.tscn" id="3_r0du0"]
 [ext_resource type="Script" uid="uid://dvkje5eqk6kqh" path="res://PackedEnemy.gd" id="4_3dxm6"]
-[ext_resource type="Material" uid="uid://dgt6ps803lahi" path="res://IntersectionShape.tres" id="4_cm0pq"]
+[ext_resource type="Material" uid="uid://dgt6ps803lahi" path="res://ShapeMaterials/IntersectionShape.tres" id="4_cm0pq"]
+[ext_resource type="Material" uid="uid://ciwse55k7v1y3" path="res://ShapeMaterials/PreviewMaterial.tres" id="4_wkp8b"]
 [ext_resource type="Resource" uid="uid://b61anstxrel0n" path="res://Shapes/Square.tres" id="5_lgr22"]
 [ext_resource type="Resource" uid="uid://ddejnxm31n0fh" path="res://Shapes/Cube/Cube.tres" id="7_03owx"]
 [ext_resource type="PackedScene" uid="uid://cqqx5yicm0l24" path="res://hit_label.tscn" id="8_trn2v"]
+
+[sub_resource type="Curve" id="Curve_03owx"]
+_limits = [0.0, 5.0, 0.0, 1.0]
+_data = [Vector2(0, 0.5), 0.0, 0.0, 0, 0, Vector2(1, 5), 7.0, 0.0, 0, 0]
+point_count = 2
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_uu6xs"]
 albedo_color = Color(0.62967473, 0.62967473, 0.6296747, 1)
@@ -20,20 +25,36 @@ albedo_color = Color(0.9966598, 0.34354967, 1, 1)
 
 [sub_resource type="Environment" id="Environment_r0du0"]
 
-[sub_resource type="LabelSettings" id="LabelSettings_fos0i"]
-font_size = 32
-
 [sub_resource type="CylinderMesh" id="CylinderMesh_fos0i"]
 top_radius = 8.0
 bottom_radius = 8.0
 height = 0.001
 
+[sub_resource type="LabelSettings" id="LabelSettings_fos0i"]
+font_size = 32
+
+[sub_resource type="Gradient" id="Gradient_wkp8b"]
+offsets = PackedFloat32Array(0)
+colors = PackedColorArray(0.21568628, 0.21568628, 0.21568628, 0.49019608)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_20pc6"]
+gradient = SubResource("Gradient_wkp8b")
+
+[sub_resource type="Gradient" id="Gradient_03owx"]
+offsets = PackedFloat32Array(1)
+colors = PackedColorArray(1, 0.47429025, 0.4444329, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_wkp8b"]
+gradient = SubResource("Gradient_03owx")
+
 [node name="Main" type="Node3D" unique_id=222001452]
 script = ExtResource("1_glv2v")
 intersection_material = ExtResource("4_cm0pq")
 xor_material = ExtResource("3_fos0i")
+preview_material = ExtResource("4_wkp8b")
 hit_label_scene = ExtResource("8_trn2v")
 enemy_scenes = Array[ExtResource("4_3dxm6")]([ExtResource("5_lgr22"), ExtResource("7_03owx")])
+sanity_penalty_curve = SubResource("Curve_03owx")
 
 [node name="Pivot" type="Node3D" parent="." unique_id=556041694]
 transform = Transform3D(0.7071067, -0.3535534, 0.61237234, 0, 0.8660254, 0.5, -0.7071067, -0.3535534, 0.61237234, 0, 0, 0)
@@ -60,10 +81,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.1, -0.499, 0)
 material_override = SubResource("StandardMaterial3D_r0du0")
 metadata/_edit_lock_ = true
 
-[node name="Enemy" parent="." unique_id=56703870 instance=ExtResource("3_cm0pq")]
-unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.4993014, 8.545597, -0.756413)
-
 [node name="SunPivot" type="Node3D" parent="." unique_id=1284798189]
 transform = Transform3D(0.89249134, 0, -0.45106447, 0, 1, 0, 0.45106447, 0, 0.89249134, 0, 0, 0)
 
@@ -74,21 +91,79 @@ shadow_enabled = true
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=381813496]
 environment = SubResource("Environment_r0du0")
 
-[node name="ScoreLabel" type="Label" parent="." unique_id=1645374122]
-unique_name_in_owner = true
-offset_left = 507.0
-offset_top = 42.0
-offset_right = 628.0
-offset_bottom = 87.0
-text = "Score: 0"
-label_settings = SubResource("LabelSettings_fos0i")
-
 [node name="SpawnerMesh" type="MeshInstance3D" parent="." unique_id=50369648]
 unique_name_in_owner = true
-visible = false
 mesh = SubResource("CylinderMesh_fos0i")
 
 [node name="SpawnTimer" type="Timer" parent="." unique_id=2057690367]
 unique_name_in_owner = true
 wait_time = 3.0
 autostart = true
+
+[node name="UI" type="MarginContainer" parent="." unique_id=1317178700]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_top = 32
+theme_override_constants/margin_right = 32
+
+[node name="Control2" type="Control" parent="UI" unique_id=1030415945]
+layout_mode = 2
+
+[node name="SurvivalTimeLabel" type="Label" parent="UI/Control2" unique_id=1645374122]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -576.0
+offset_right = 576.0
+offset_bottom = 45.0
+grow_horizontal = 2
+text = "00:00"
+label_settings = SubResource("LabelSettings_fos0i")
+horizontal_alignment = 1
+
+[node name="SurvivalTimer" type="Timer" parent="UI/Control2" unique_id=1757353549]
+
+[node name="Control" type="Control" parent="UI" unique_id=339671969]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="UI/Control" unique_id=2139024778]
+custom_minimum_size = Vector2(48, 256)
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -32.0
+offset_bottom = 45.0
+grow_horizontal = 0
+size_flags_horizontal = 8
+
+[node name="SanityBar" type="TextureProgressBar" parent="UI/Control/MarginContainer" unique_id=484657580]
+unique_name_in_owner = true
+layout_mode = 2
+value = 50.0
+fill_mode = 3
+nine_patch_stretch = true
+texture_under = SubResource("GradientTexture2D_20pc6")
+texture_progress = SubResource("GradientTexture2D_wkp8b")
+
+[node name="SanityLabel" type="Label" parent="UI/Control/MarginContainer/SanityBar" unique_id=502062163]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -11.5
+offset_right = 20.0
+offset_bottom = 11.5
+grow_horizontal = 2
+grow_vertical = 2
+text = "50%"
+horizontal_alignment = 1
