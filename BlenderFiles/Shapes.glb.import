@@ -48,14 +48,14 @@ _subresources={
 "save_to_file/fallback_path": "res://Shapes/Cube/Cube.res",
 "save_to_file/path": "uid://cx677yd1st4i3"
 },
-"Shapes_CubePyramid": {
+"Shapes_CubeArch": {
 "generate/lightmap_uv": 0,
 "generate/lods": 0,
 "generate/shadow_meshes": 0,
 "lods/normal_merge_angle": 20.0,
 "save_to_file/enabled": true,
-"save_to_file/fallback_path": "res://Shapes/CubePyramid/CubePyramid.res",
-"save_to_file/path": "uid://jroq4n7ag3or"
+"save_to_file/fallback_path": "res://Shapes/CubeArch/CubeArch.res",
+"save_to_file/path": "uid://c75utosvxg8f2"
 },
 "Shapes_Cylinder": {
 "generate/lightmap_uv": 0,

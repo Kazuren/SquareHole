@@ -1,0 +1,24 @@
+[gd_resource type="Resource" script_class="PackedEnemy" format=3 uid="uid://b7fcwcrpmocan"]
+
+[ext_resource type="PackedScene" uid="uid://42f6aiuw4wlw" path="res://Shapes/CubeArch/CubeArch.tscn" id="1_jbcwi"]
+[ext_resource type="Script" uid="uid://dvkje5eqk6kqh" path="res://PackedEnemy.gd" id="1_uxj17"]
+
+[sub_resource type="Curve" id="Curve_uxj17"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(1, 0.5), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_jbcwi"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.5), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_2nvx6"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.5), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[resource]
+script = ExtResource("1_uxj17")
+weight_curve = SubResource("Curve_2nvx6")
+scene = ExtResource("1_jbcwi")
+rotation_angles = Array[float]([0.0, -45.0])
+rotation_weight_curves = Array[Curve]([SubResource("Curve_uxj17"), SubResource("Curve_jbcwi")])
+metadata/_custom_type_script = "uid://dvkje5eqk6kqh"

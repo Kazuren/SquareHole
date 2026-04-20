@@ -10,8 +10,11 @@
 [ext_resource type="Resource" uid="uid://l2rgga6pwi5k" path="res://Shapes/Star/StarPacked.tres" id="7_wkp8b"]
 [ext_resource type="PackedScene" uid="uid://cqqx5yicm0l24" path="res://hit_label.tscn" id="8_trn2v"]
 [ext_resource type="Resource" uid="uid://c4fc1lhgghdri" path="res://Shapes/Tetris/TetrisPacked.tres" id="9_20pc6"]
+[ext_resource type="Resource" uid="uid://b7fcwcrpmocan" path="res://Shapes/CubeArch/CubeArchPacked.tres" id="10_c6i3y"]
 [ext_resource type="PackedScene" uid="uid://0ml6tai6bru5" path="res://ShapeCarousel.tscn" id="11_20pc6"]
+[ext_resource type="Resource" uid="uid://d4amk2h351fne" path="res://Shapes/Sphere/SpherePacked.tres" id="11_c2ibq"]
 [ext_resource type="Script" uid="uid://b4ih4s2yo2fwe" path="res://end_screens.gd" id="12_endsc"]
+[ext_resource type="Resource" uid="uid://dn8ha372js3ky" path="res://Shapes/Cylinder/CylinderPacked.tres" id="12_j4qnp"]
 
 [sub_resource type="Gradient" id="Gradient_20pc6"]
 interpolation_mode = 2
@@ -33,6 +36,9 @@ uv1_triplanar = true
 albedo_color = Color(0.9966598, 0.34354967, 1, 1)
 
 [sub_resource type="Environment" id="Environment_r0du0"]
+ambient_light_source = 2
+ambient_light_color = Color(0.74509805, 0.7490196, 0.77254903, 1)
+ambient_light_energy = 0.4
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_fos0i"]
 top_radius = 8.0
@@ -63,14 +69,14 @@ xor_material = ExtResource("3_fos0i")
 preview_material = ExtResource("4_wkp8b")
 hit_label_scene = ExtResource("8_trn2v")
 score_color_gradient = SubResource("Gradient_20pc6")
-enemy_scenes = Array[ExtResource("4_3dxm6")]([ExtResource("7_wkp8b"), ExtResource("7_03owx"), ExtResource("9_20pc6")])
+enemy_scenes = Array[ExtResource("4_3dxm6")]([ExtResource("7_wkp8b"), ExtResource("7_03owx"), ExtResource("9_20pc6"), ExtResource("10_c6i3y"), ExtResource("11_c2ibq"), ExtResource("12_j4qnp")])
 game_duration = 600.0
 sanity_penalty_curve = SubResource("Curve_03owx")
 
-[node name="Pivot" type="Node3D" parent="." unique_id=47895836]
+[node name="CameraPivot" type="Node3D" parent="." unique_id=47895836]
 transform = Transform3D(0.7071067, -0.3535534, 0.61237234, 0, 0.8660254, 0.5, -0.7071067, -0.3535534, 0.61237234, 0, 0, 0)
 
-[node name="Camera3D" type="Camera3D" parent="Pivot" unique_id=343791336]
+[node name="Camera3D" type="Camera3D" parent="CameraPivot" unique_id=343791336]
 transform = Transform3D(0.99999994, 0, 0, 0, 0.99999994, 0, 0, 0, 0.99999994, 0, 0, 14)
 projection = 1
 current = true
@@ -92,6 +98,16 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.1, 0, 0)
 material_override = SubResource("StandardMaterial3D_r0du0")
 metadata/_edit_lock_ = true
 
+[node name="FillLightPivot" type="Node3D" parent="." unique_id=424021540]
+transform = Transform3D(0.4067366, 0.6459742, -0.6459742, 0, 0.70710677, 0.70710677, 0.9135455, -0.2876062, 0.2876062, 0, 0, 0)
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="FillLightPivot" unique_id=1585231140]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 30, 0)
+light_color = Color(1, 0.89411765, 0.88235295, 1)
+light_energy = 0.3
+light_indirect_energy = 0.3
+light_volumetric_fog_energy = 0.3
+
 [node name="SunPivot" type="Node3D" parent="." unique_id=771010700]
 transform = Transform3D(0.89249134, 0, -0.45106447, 0, 1, 0, 0.45106447, 0, 0.89249134, 0, 0, 0)
 
@@ -104,6 +120,7 @@ environment = SubResource("Environment_r0du0")
 
 [node name="SpawnerMesh" type="MeshInstance3D" parent="." unique_id=1297717980]
 unique_name_in_owner = true
+visible = false
 mesh = SubResource("CylinderMesh_fos0i")
 metadata/_edit_lock_ = true
 

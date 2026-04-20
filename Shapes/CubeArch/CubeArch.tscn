@@ -1,0 +1,14 @@
+[gd_scene format=3 uid="uid://42f6aiuw4wlw"]
+
+[ext_resource type="PackedScene" uid="uid://c2fglmehf860l" path="res://Enemy.tscn" id="1_iivre"]
+[ext_resource type="ArrayMesh" uid="uid://c75utosvxg8f2" path="res://Shapes/CubeArch/CubeArch.res" id="2_y2uo3"]
+
+[sub_resource type="ConvexPolygonShape2D" id="ConvexPolygonShape2D_y2uo3"]
+resource_local_to_scene = true
+points = PackedVector2Array(0.5, 0.5, -0.5, 0.5, -0.5, -0.5, 0.5, -0.5)
+
+[node name="CubeArch" unique_id=56703870 instance=ExtResource("1_iivre")]
+mesh = ExtResource("2_y2uo3")
+
+[node name="CollisionShape2D" parent="." index="0" unique_id=976849342]
+shape = SubResource("ConvexPolygonShape2D_y2uo3")

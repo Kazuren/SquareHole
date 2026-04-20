@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="PackedEnemy" format=3 uid="uid://dn8ha372js3ky"]
+
+[ext_resource type="PackedScene" uid="uid://k758ojiuedpr" path="res://Shapes/Cylinder/Cylinder.tscn" id="1_hw5f0"]
+[ext_resource type="Script" uid="uid://dvkje5eqk6kqh" path="res://PackedEnemy.gd" id="2_sfr7v"]
+
+[sub_resource type="Curve" id="Curve_hw5f0"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.5), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[resource]
+script = ExtResource("2_sfr7v")
+weight_curve = SubResource("Curve_hw5f0")
+scene = ExtResource("1_hw5f0")
+metadata/_custom_type_script = "uid://dvkje5eqk6kqh"
