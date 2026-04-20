@@ -10,7 +10,6 @@ extends Node3D
 
 # fairness of game, way to spawn objects in a more fair way
 # add gravity field concept to pull far away objects closer to player (we set a min distance away from player) for fairness
-# find better gradient for popup text percentage
 # sounds: 100% match, 0% match, 100->50% lessen pitch, 49->0% lessen pitch
 # more shapes
 
