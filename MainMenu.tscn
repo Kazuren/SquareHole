@@ -8,6 +8,10 @@
 [sub_resource type="LabelSettings" id="LabelSettings_title"]
 font_size = 64
 
+[sub_resource type="LabelSettings" id="LabelSettings_qoqlk"]
+font = ExtResource("2_h7a2f")
+font_size = 64
+
 [node name="MainMenu" type="Control" unique_id=71170604]
 layout_mode = 3
 anchors_preset = 15
@@ -81,3 +85,19 @@ text = "Exit"
 unique_name_in_owner = true
 visible = false
 layout_mode = 1
+
+[node name="Label" type="Label" parent="." unique_id=1566373156]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -333.0
+offset_top = -97.33301
+offset_right = 333.0
+offset_bottom = -31.999634
+grow_horizontal = 2
+grow_vertical = 0
+text = "Made by Kazuren & Zoldanka"
+label_settings = SubResource("LabelSettings_qoqlk")

@@ -14,6 +14,7 @@ const BAD_SFX_2 = preload("res://Sound/Sfx/bad2.wav")
 
 @onready var master_slider: HSlider = %MasterSlider
 @onready var back_button: Button = %SettingsBackButton
+@onready var fullscreen_check: CheckBox = %FullscreenCheck
 
 var preview_player: AudioStreamPlayer
 var preview_pool: Array[AudioStream] = []
@@ -30,6 +31,7 @@ func _ready() -> void:
 
 	master_slider.value_changed.connect(_on_master_changed)
 	master_slider.drag_ended.connect(_on_master_drag_ended)
+	fullscreen_check.toggled.connect(_on_fullscreen_toggled)
 	back_button.pressed.connect(func() -> void: back_pressed.emit())
 	_load_settings()
 
@@ -58,18 +60,33 @@ func _apply_volume(bus_name: String, v: float) -> void:
 	AudioServer.set_bus_volume_db(idx, linear_to_db(maxf(v, 0.0001)))
 
 
+func _on_fullscreen_toggled(pressed: bool) -> void:
+	_apply_fullscreen(pressed)
+	_save_settings()
+
+
+func _apply_fullscreen(enabled: bool) -> void:
+	get_window().mode = Window.MODE_FULLSCREEN if enabled else Window.MODE_WINDOWED
+
+
 func _load_settings() -> void:
 	var cfg := ConfigFile.new()
 	var master_v: float = 1.0
+	var fullscreen: bool = false
 	if cfg.load(CONFIG_PATH) == OK:
 		master_v = cfg.get_value("audio", "master", 1.0)
+		fullscreen = cfg.get_value("display", "fullscreen", false)
 	master_slider.value = master_v
 	_apply_volume("Master", master_v)
+	# no-signal so we don't trigger _on_fullscreen_toggled during init.
+	fullscreen_check.set_pressed_no_signal(fullscreen)
+	_apply_fullscreen(fullscreen)
 
 
 func _save_settings() -> void:
 	var cfg := ConfigFile.new()
 	cfg.set_value("audio", "master", master_slider.value)
+	cfg.set_value("display", "fullscreen", fullscreen_check.button_pressed)
 	cfg.save(CONFIG_PATH)
 
 
