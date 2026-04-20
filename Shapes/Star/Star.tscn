@@ -9,7 +9,6 @@ points = PackedVector2Array(-0.246, 0.08, -0.476, -0.155, -0.152, -0.21, 0, -0.5
 
 [node name="Star" unique_id=56703870 instance=ExtResource("1_h8hqe")]
 mesh = ExtResource("2_ketn6")
-metadata/_edit_lock_ = true
 
 [node name="CollisionShape2D" parent="." index="0" unique_id=976849342]
 shape = SubResource("ConvexPolygonShape2D_h8hqe")

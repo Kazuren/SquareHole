@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="PackedShape" format=3 uid="uid://ct34iwg4tgloc"]
+
+[ext_resource type="Script" uid="uid://3g8b7vqjcpgj" path="res://PackedShape.gd" id="1_6wlwk"]
+
+[resource]
+script = ExtResource("1_6wlwk")
+points = PackedVector2Array(-0.5, 0.333, -0.167, 0.333, 0.167, 0.333, 0.167, 0, 0.5, 0, 0.5, -0.333, 0.16, -0.333, -0.166, -0.333, -0.167, 0, -0.5, 0)
+display_name = "Tetris"
+metadata/_custom_type_script = "uid://3g8b7vqjcpgj"

@@ -16,5 +16,5 @@ func _process(delta: float) -> void:
 
 
 func _physics_process(delta: float) -> void:
-	self.translate(Vector3(0, -BASE_METERS_PER_SECOND * delta, 0))
+	self.global_translate(Vector3(0, -BASE_METERS_PER_SECOND * delta, 0))
 

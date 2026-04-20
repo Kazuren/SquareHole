@@ -154,9 +154,9 @@ func spawn_enemy() -> void:
 	var preview := CSGPolygon3D.new()
 	add_child(preview)
 	preview.depth = 0.01
-	preview.polygon = node.get_translated_vectorarray()
+	preview.polygon = node.get_points_local_transformed()
 	preview.rotate_x(deg_to_rad(90))
-	preview.global_translate(Vector3(0, 0.005, 0))
+	preview.global_position = Vector3(node.position.x, 0.005, node.position.z)
 	preview.material = preview_material.duplicate()
 	preview.sorting_offset = 5
 	enemy_previews[node] = preview
@@ -238,13 +238,22 @@ func _physics_process(delta: float) -> void:
 			var player_excess_shapes: Array[PackedVector2Array] = player.get_player_excess_shapes(e)
 
 			if intersection_shape != null:
+				var centroid := Vector2.ZERO
+				for p in intersection_shape:
+					centroid += p
+				centroid /= intersection_shape.size()
+
+				var local_points := PackedVector2Array()
+				for p in intersection_shape:
+					local_points.append(p - centroid)
+
 				var intersection_polygon: CSGPolygon3D = CSGPolygon3D.new()
 				add_child(intersection_polygon)
 
 				intersection_polygon.depth = 0.02
-				intersection_polygon.polygon = intersection_shape
+				intersection_polygon.polygon = local_points
 				intersection_polygon.rotate_x(deg_to_rad(90))
-				intersection_polygon.global_translate(Vector3(0, 0.01, 0))
+				intersection_polygon.global_position = Vector3(centroid.x, 0.01, centroid.y)
 				intersection_polygon.material = intersection_material.duplicate()
 				intersection_polygon.sorting_offset = 10
 
@@ -269,13 +278,24 @@ func spawn_xor_visual(shapes: Array[PackedVector2Array]) -> void:
 	if shapes.is_empty():
 		return
 
+	# Shared pivot across all shapes so the combiner sits at a meaningful
+	# position and each child polygon is stored in local space around it.
+	var centroid := Vector2.ZERO
+	var total_points := 0
+	for shape in shapes:
+		for p in shape:
+			centroid += p
+			total_points += 1
+	if total_points > 0:
+		centroid /= total_points
+
 	# Use a combiner so clockwise-winding polygons (holes from clip_polygons)
 	# can be subtracted from their outer boundary. This produces ring shapes
 	# when one polygon fully contains the other.
 	var combiner := CSGCombiner3D.new()
 	add_child(combiner)
 	combiner.rotate_x(deg_to_rad(90))
-	combiner.global_translate(Vector3(0, 0.01, 0))
+	combiner.global_position = Vector3(centroid.x, 0.01, centroid.y)
 	combiner.sorting_offset = 10
 
 	var child_materials: Array[BaseMaterial3D] = []
@@ -283,7 +303,10 @@ func spawn_xor_visual(shapes: Array[PackedVector2Array]) -> void:
 	for shape in shapes:
 		var csg := CSGPolygon3D.new()
 		combiner.add_child(csg)
-		csg.polygon = shape
+		var local_shape := PackedVector2Array()
+		for p in shape:
+			local_shape.append(p - centroid)
+		csg.polygon = local_shape
 		csg.depth = 0.02
 		csg.material = xor_material.duplicate()
 		child_materials.append(csg.material)
