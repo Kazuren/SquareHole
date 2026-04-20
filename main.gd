@@ -334,15 +334,15 @@ func print_enemy_rotation_probabilities() -> void:
 	for pack in enemy_scenes:
 		if not pack:
 			continue
-		var name := "?"
+		var enemy_name := "?"
 		if pack.scene:
-			name = pack.scene.resource_path.get_file().get_basename()
+			enemy_name = pack.scene.resource_path.get_file().get_basename()
 
 		if pack.rotation_weight_curves.is_empty():
-			print("Rotation probabilities for ", name, ": none (always 0°)")
+			print("Rotation probabilities for ", enemy_name, ": none (always 0°)")
 			continue
 
-		print("Rotation probabilities for ", name, " by minute:")
+		print("Rotation probabilities for ", enemy_name, " by minute:")
 		var header := "  min  "
 		for i in pack.rotation_weight_curves.size():
 			header += "| %6s° " % str(int(i * rotation_step))
