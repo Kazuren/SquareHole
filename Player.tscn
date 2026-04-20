@@ -2,16 +2,30 @@
 
 [ext_resource type="PackedScene" uid="uid://b08vphhmktfun" path="res://ShapeEntity.tscn" id="1_xhfnw"]
 [ext_resource type="Script" uid="uid://bksw4nu15jtkw" path="res://player.gd" id="2_kpjcp"]
+[ext_resource type="Script" uid="uid://3g8b7vqjcpgj" path="res://PackedShape.gd" id="3_cxr5p"]
+[ext_resource type="Resource" uid="uid://nmp3181riajc" path="res://Shapes/PlayerShapes/Square.tres" id="4_tdg3f"]
+[ext_resource type="Resource" uid="uid://dshapestar01" path="res://Shapes/PlayerShapes/Star.tres" id="5_dtqjt"]
 
-[sub_resource type="ConvexPolygonShape2D" id="ConvexPolygonShape2D_xhfnw"]
+[sub_resource type="ConvexPolygonShape2D" id="ConvexPolygonShape2D_cxr5p"]
 resource_local_to_scene = true
 points = PackedVector2Array(50, -50, -50, -50, -50, 50, 50, 50)
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_visual"]
+albedo_color = Color(0.9966598, 0.34354967, 1, 1)
+
 [node name="Player" unique_id=56703870 instance=ExtResource("1_xhfnw")]
 sorting_offset = 10.0
+mesh = null
 script = ExtResource("2_kpjcp")
 PLAYER_WALK_SPEED_PER_SECOND = 3.0
 PLAYER_RUN_SPEED_PER_SECOND = 5.0
+shapes = Array[ExtResource("3_cxr5p")]([ExtResource("4_tdg3f"), ExtResource("5_dtqjt")])
 
 [node name="CollisionShape2D" parent="." index="0" unique_id=976849342]
-shape = SubResource("ConvexPolygonShape2D_xhfnw")
+shape = SubResource("ConvexPolygonShape2D_cxr5p")
+
+[node name="Visual" type="CSGPolygon3D" parent="." index="1" unique_id=1329389281]
+transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 0, 0.5, 0)
+polygon = PackedVector2Array(0.5, -0.5, -0.5, -0.5, -0.5, 0.5, 0.5, 0.5)
+depth = 0.02
+material = SubResource("StandardMaterial3D_visual")

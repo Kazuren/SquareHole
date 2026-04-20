@@ -9,6 +9,7 @@
 [ext_resource type="Resource" uid="uid://ddejnxm31n0fh" path="res://Shapes/Cube/Cube.tres" id="7_03owx"]
 [ext_resource type="Resource" uid="uid://l2rgga6pwi5k" path="res://Shapes/Star.tres" id="7_wkp8b"]
 [ext_resource type="PackedScene" uid="uid://cqqx5yicm0l24" path="res://hit_label.tscn" id="8_trn2v"]
+[ext_resource type="PackedScene" uid="uid://0ml6tai6bru5" path="res://ShapeCarousel.tscn" id="11_20pc6"]
 
 [sub_resource type="Curve" id="Curve_03owx"]
 _limits = [0.0, 10.0, 0.0, 1.0]
@@ -79,7 +80,6 @@ metadata/_edit_group_ = true
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.1, -0.499, 0)
 material_override = SubResource("StandardMaterial3D_r0du0")
-metadata/_edit_lock_ = true
 
 [node name="SunPivot" type="Node3D" parent="." unique_id=1284798189]
 transform = Transform3D(0.89249134, 0, -0.45106447, 0, 1, 0, 0.45106447, 0, 0.89249134, 0, 0, 0)
@@ -108,9 +108,11 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/margin_top = 32
 theme_override_constants/margin_right = 32
+metadata/_edit_lock_ = true
 
 [node name="Control2" type="Control" parent="UI" unique_id=1030415945]
 layout_mode = 2
+metadata/_edit_lock_ = true
 
 [node name="SurvivalTimeLabel" type="Label" parent="UI/Control2" unique_id=1645374122]
 unique_name_in_owner = true
@@ -130,6 +132,7 @@ horizontal_alignment = 1
 
 [node name="Control" type="Control" parent="UI" unique_id=339671969]
 layout_mode = 2
+metadata/_edit_lock_ = true
 
 [node name="MarginContainer" type="MarginContainer" parent="UI/Control" unique_id=2139024778]
 custom_minimum_size = Vector2(48, 256)
@@ -167,3 +170,14 @@ grow_horizontal = 2
 grow_vertical = 2
 text = "50%"
 horizontal_alignment = 1
+
+[node name="MarginContainer" type="MarginContainer" parent="UI" unique_id=1622573084]
+custom_minimum_size = Vector2(0, 180)
+layout_mode = 2
+size_flags_vertical = 8
+metadata/_edit_lock_ = true
+
+[node name="ShapeCarousel" parent="UI/MarginContainer" unique_id=1592716139 instance=ExtResource("11_20pc6")]
+layout_mode = 2
+player_path = NodePath("../../../Player")
+metadata/_edit_lock_ = true

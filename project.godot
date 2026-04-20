@@ -19,6 +19,12 @@ config/icon="res://icon.svg"
 
 GameStats="*uid://k6l065k5x6la"
 
+[display]
+
+window/size/viewport_width=1920
+window/size/viewport_height=1080
+window/stretch/mode="canvas_items"
+
 [dotnet]
 
 project/assembly_name="Square Hole"

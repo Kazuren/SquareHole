@@ -1,0 +1,8 @@
+[gd_resource type="Resource" script_class="PackedShape" format=3 uid="uid://nmp3181riajc"]
+
+[ext_resource type="Script" uid="uid://3g8b7vqjcpgj" path="res://PackedShape.gd" id="1_packedshape"]
+
+[resource]
+script = ExtResource("1_packedshape")
+points = PackedVector2Array(50, -50, -50, -50, -50, 50, 50, 50)
+display_name = "Square"

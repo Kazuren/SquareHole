@@ -1,0 +1,8 @@
+[gd_resource type="Resource" script_class="PackedShape" format=3 uid="uid://dshapestar01"]
+
+[ext_resource type="Script" uid="uid://3g8b7vqjcpgj" path="res://PackedShape.gd" id="1_packedshape"]
+
+[resource]
+script = ExtResource("1_packedshape")
+points = PackedVector2Array(-48, 0, -16, 16, 0, 48, 16, 16, 50, 0, 16, -16, 0, -48, -16, -16)
+display_name = "Star"
