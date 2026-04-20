@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="Square Hole"
-run/main_scene="uid://3d31nk2ftblc"
+run/main_scene="res://MainMenu.tscn"
 config/features=PackedStringArray("4.6", "Forward Plus")
 config/icon="res://icon.svg"
 

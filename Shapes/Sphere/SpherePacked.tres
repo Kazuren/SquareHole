@@ -4,8 +4,8 @@
 [ext_resource type="PackedScene" uid="uid://etnenjh66qbu" path="res://Shapes/Sphere/Sphere.tscn" id="1_odadw"]
 
 [sub_resource type="Curve" id="Curve_odadw"]
-_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.5), 0.0, 0.0, 0, 0]
-point_count = 2
+_data = [Vector2(0.02, 0), 0.0, 0.0, 0, 0, Vector2(0.40953946, 0.2808178), 0.20968461, 0.20968461, 0, 0, Vector2(1, 0.327721), 0.0, 0.0, 0, 0]
+point_count = 3
 
 [resource]
 script = ExtResource("1_0sd0a")

@@ -8,11 +8,11 @@ _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.5), 0.0, 0.0, 0, 0]
 point_count = 2
 
 [sub_resource type="Curve" id="Curve_xylws"]
-_data = [Vector2(0.048387095, 0), 0.0, 0.0, 0, 0, Vector2(1, 0.5), 0.0, 0.0, 0, 0]
-point_count = 2
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.07333334, 0), 0.0, 0.0, 0, 0, Vector2(0.075, 0.2), 0.0, 0.2, 0, 0, Vector2(1, 0.5), 0.0, 0.0, 0, 0]
+point_count = 4
 
 [sub_resource type="Curve" id="Curve_1m6dx"]
-_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(1, 0.5), 0.0, 0.0, 0, 0]
+_data = [Vector2(0, 0.2), 0.0, -0.2915212, 0, 0, Vector2(1, 0.13619965), 0.0, 0.0, 0, 0]
 point_count = 2
 
 [resource]

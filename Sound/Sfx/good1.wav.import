@@ -2,13 +2,13 @@
 
 importer="wav"
 type="AudioStreamWAV"
-uid="uid://dsf3bcf0gfs02"
-path="res://.godot/imported/failuerSfx.wav-d69fc7f083c0a8996552c4664503a9cf.sample"
+uid="uid://dr0j0c5cqutsw"
+path="res://.godot/imported/good1.wav-8e32553c2254e3b21108eb7a2b7a2aaa.sample"
 
 [deps]
 
-source_file="res://Sound/Sfx/failuerSfx.wav"
-dest_files=["res://.godot/imported/failuerSfx.wav-d69fc7f083c0a8996552c4664503a9cf.sample"]
+source_file="res://Sound/Sfx/good1.wav"
+dest_files=["res://.godot/imported/good1.wav-8e32553c2254e3b21108eb7a2b7a2aaa.sample"]
 
 [params]
 

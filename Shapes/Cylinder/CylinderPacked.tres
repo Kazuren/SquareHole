@@ -4,8 +4,8 @@
 [ext_resource type="Script" uid="uid://dvkje5eqk6kqh" path="res://PackedEnemy.gd" id="2_sfr7v"]
 
 [sub_resource type="Curve" id="Curve_hw5f0"]
-_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.5), 0.0, 0.0, 0, 0]
-point_count = 2
+_data = [Vector2(0.01, 0), 0.0, 0.0, 0, 0, Vector2(0.3618421, 0.23000604), 0.2970534, 0.2970534, 0, 0, Vector2(1, 0.32381237), 0.12845573, 0.0, 0, 0]
+point_count = 3
 
 [resource]
 script = ExtResource("2_sfr7v")

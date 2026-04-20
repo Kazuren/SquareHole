@@ -1,0 +1,61 @@
+[gd_scene load_steps=4 format=3 uid="uid://mainmenu0001"]
+
+[ext_resource type="Script" path="res://main_menu.gd" id="1_main"]
+[ext_resource type="PackedScene" path="res://SettingsPopup.tscn" id="2_sp"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_title"]
+font_size = 64
+
+[node name="MainMenu" type="Control"]
+script = ExtResource("1_main")
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MainMenuPanel" type="VBoxContainer" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -200.0
+offset_top = -160.0
+offset_right = 200.0
+offset_bottom = 160.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 16
+alignment = 1
+
+[node name="TitleLabel" type="Label" parent="MainMenuPanel"]
+layout_mode = 2
+text = "Square Hole"
+label_settings = SubResource("LabelSettings_title")
+horizontal_alignment = 1
+
+[node name="PlayButton" type="Button" parent="MainMenuPanel"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+text = "Play"
+
+[node name="SettingsButton" type="Button" parent="MainMenuPanel"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+text = "Settings"
+
+[node name="ExitButton" type="Button" parent="MainMenuPanel"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+text = "Exit"
+
+[node name="SettingsPopup" parent="." instance=ExtResource("2_sp")]
+unique_name_in_owner = true
+visible = false

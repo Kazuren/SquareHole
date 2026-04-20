@@ -12,6 +12,10 @@ uniform float pixelation_max : hint_range(0.0, 0.02) = 0.006;
 uniform float scanline_frequency = 420.0;
 uniform float roll_frequency = 22.0;
 
+uniform float vignette_max : hint_range(0.0, 1.0) = 0.6;
+uniform float vignette_inner : hint_range(0.0, 1.0) = 0.3;
+uniform float vignette_outer : hint_range(0.0, 1.5) = 0.9;
+
 uniform sampler2D screen_tex : hint_screen_texture, repeat_disable, filter_nearest;
 
 float hash(vec2 p) {
@@ -47,6 +51,11 @@ void fragment() {
 	// Static noise overlay
 	float n = hash(uv * 500.0 + TIME);
 	col = mix(col, vec3(n), noise_max * intensity * 0.6);
+
+	// Vignette — darkens the edges, scales with intensity
+	float dist = distance(SCREEN_UV, vec2(0.5));
+	float vignette = smoothstep(vignette_inner, vignette_outer, dist);
+	col *= 1.0 - vignette * vignette_max * intensity;
 
 	COLOR = vec4(col, 1.0);
 }

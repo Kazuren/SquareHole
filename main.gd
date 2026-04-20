@@ -1,28 +1,9 @@
 extends Node3D
 
 
-# formula:
-# enemy_shape INTERSECT player_shape = intersection_shape
-# score = intersection_shape_area / max(enemy_shape_area, player_shape_area)
-
-
-#THINGS TO FIX:
-
-# fairness of game, way to spawn objects in a more fair way
-# add gravity field concept to pull far away objects closer to player (we set a min distance away from player) for fairness
-
-# sounds: 100% match, 0% match, 100->50% lessen pitch, 49->0% lessen pitch
-# main menu
-
-# distortion as player loses sanity?
-
-# maybe switch from curved to linear score formula as game progresses to aid in difficulty scaling?
-
-
 @onready var heartbeat_player := AudioStreamPlayer.new()
 @onready var heartbeat_timer := Timer.new()
-
-
+@onready var sfx_player := AudioStreamPlayer.new()
 
 @export var intersection_material: BaseMaterial3D
 @export var xor_material: BaseMaterial3D
@@ -46,6 +27,19 @@ var game_ended: bool = false
 @export var game_duration: float = 1200.0 # seconds
 
 var SANITY_MULTIPLIER: float = 0.05 # in percent
+# Match % at which sanity change is 0. Above = gain, below = loss.
+# Used when sanity_threshold_curve is null.
+@export_range(0.0, 1.0, 0.01) var sanity_threshold: float = 0.5
+# X: game progress (0-1 over game_duration), Y: threshold at that progress (0-1).
+# If set, overrides the constant sanity_threshold and ramps difficulty over time.
+# Example: Y = 0.4 at progress=0, Y = 0.8 at progress=1 → easier early, harsher late.
+@export var sanity_threshold_curve: Curve
+# Streak bonus: consecutive gains multiply future gains up to (1 + cap)x.
+# A 100% match adds `step` to the bonus; lower matches add `step * score_base`.
+# Any miss (below threshold) resets the bonus to 0.
+@export var sanity_gain_streak_step: float = 0.5 # +50% per perfect hit
+@export var sanity_gain_streak_max: float = 2.0 # caps total bonus at +200% (3x gain)
+var sanity_gain_streak: float = 0.0
 @export var sanity_penalty_curve: Curve # X: 0-1 (progress over game_duration), Y: penalty multiplier
 @export_range(0.1, 1.0, 0.05) var enemy_shape_scale: float = 1.0
 @export_range(0.0, 5.0, 0.1) var magnet_radius: float = 0.2
@@ -67,8 +61,13 @@ const SANE_TEXTURE = preload("res://Art/GirlExpressions/squareHoleGirlSane.png")
 const SEMISANE_TEXTURE = preload("res://Art/GirlExpressions/squareHoleGirlSemiSane.png")
 const INSANE_TEXTURE = preload("res://Art/GirlExpressions/squareHoleGirlInsane.png")
 
-const HIT_SFX = preload("res://Sound/Sfx/successSfx.wav")
-const MISS_SFX = preload("res://Sound/Sfx/failureSfx.wav")
+const GOOD_SFX_1 = preload("res://Sound/Sfx/good1.wav")
+const GOOD_SFX_2 = preload("res://Sound/Sfx/good2.wav")
+const BAD_SFX_1 = preload("res://Sound/Sfx/bad1.wav")
+const BAD_SFX_2 = preload("res://Sound/Sfx/bad2.wav")
+
+var good_sfx_bag: Bag
+var bad_sfx_bag: Bag
 
 func render_girl_sanity_expression(sanityValue: float) -> void:
 	if sanityValue <= 100 and sanityValue >= 67:
@@ -90,7 +89,7 @@ func render_sanity() -> void:
 	#signal distortion — more distortion the lower the sanity
 	(signal_distortion_rect.material as ShaderMaterial).set_shader_parameter("intensity", 1.0 - GameStats.sanity)
 
-	#heartbeat — BPM speeds up as sanity drops (pitch unchanged)
+	#heartbeat, BPM speeds up as sanity drops
 	var panic: float = 1.0 - GameStats.sanity
 	var curved_panic: float = heartbeat_bpm_curve.sample(panic) if heartbeat_bpm_curve else panic
 	var bpm: float = lerp(heartbeat_min_bpm, heartbeat_max_bpm, curved_panic)
@@ -112,19 +111,42 @@ func get_sanity_penalty_multiplier() -> float:
 
 enum SanityFormula { DEFAULT, FORGIVING }
 
+func get_current_sanity_threshold() -> float:
+	if sanity_threshold_curve:
+		return clamp(sanity_threshold_curve.sample(get_game_progress()), 0.0, 1.0)
+	return sanity_threshold
+
+
 func calculate_sanity_change(score_base: float, formula: SanityFormula = SanityFormula.DEFAULT) -> float:
+	var threshold: float = get_current_sanity_threshold()
+	# Remap score around the current threshold so it's -1 at score=0, 0 at threshold, +1 at score=1.
+	var normalized: float
+	if score_base >= threshold:
+		normalized = (score_base - threshold) / maxf(1.0 - threshold, 0.0001)
+	else:
+		normalized = (score_base - threshold) / maxf(threshold, 0.0001)
+
 	var change: float
 	match formula:
 		SanityFormula.DEFAULT:
-			change = (score_base - (1.0 - score_base)) * SANITY_MULTIPLIER
+			change = normalized * SANITY_MULTIPLIER
 		SanityFormula.FORGIVING:
-			change = (score_base - (1.0 - score_base) * 0.5) * SANITY_MULTIPLIER
+			# Halve loss, keep full gain.
+			change = normalized * SANITY_MULTIPLIER * (0.5 if normalized < 0 else 1.0)
 		_:
 			change = 0.0
 
-	# Only apply penalty ramp to sanity loss
-	if change < 0:
+	if change >= 0:
+		# Build streak *first*, then apply. A perfect match bumps by the full step.
+		# weaker hits contribute proportionally to their match %.
+		sanity_gain_streak = minf(sanity_gain_streak + sanity_gain_streak_step * score_base, sanity_gain_streak_max)
+		change *= 1.0 + sanity_gain_streak
+	else:
+		# Any miss breaks the streak.
+		sanity_gain_streak = 0.0
+		# Apply penalty ramp to sanity loss.
 		change *= get_sanity_penalty_multiplier()
+
 	return change
 
 
@@ -134,7 +156,7 @@ func _ready() -> void:
 	GameStats.sanity = 1.0
 	render_sanity()
 
-	rng.seed = 42
+	#rng.seed = 42
 
 	print_enemy_spawn_probabilities()
 	print_enemy_rotation_probabilities()
@@ -145,10 +167,22 @@ func _ready() -> void:
 	end_screens.retry_pressed.connect(_on_retry_pressed)
 	end_screens.endless_mode_pressed.connect(_on_endless_mode_pressed)
 
+	heartbeat_player.bus = "SFX"
 	add_child(heartbeat_player)
 	heartbeat_player.stream = _make_heartbeat()
 	add_child(heartbeat_timer)
 	heartbeat_timer.timeout.connect(func() -> void: heartbeat_player.play())
+
+	sfx_player.bus = "SFX"
+	add_child(sfx_player)
+
+	good_sfx_bag = Bag.new(rng)
+	good_sfx_bag.add(GOOD_SFX_1)
+	good_sfx_bag.add(GOOD_SFX_2)
+	bad_sfx_bag = Bag.new(rng)
+	bad_sfx_bag.add(BAD_SFX_1)
+	bad_sfx_bag.add(BAD_SFX_2)
+
 	render_sanity()
 	heartbeat_timer.start()
 	heartbeat_player.play()
@@ -203,12 +237,12 @@ func check_end_conditions() -> void:
 	if GameStats.sanity <= 0.0:
 		game_ended = true
 		get_tree().paused = true
-		end_screens.show_game_over()
+		end_screens.show_game_over(get_elapsed_seconds())
 		return
 	if not endless_mode and get_elapsed_seconds() >= game_duration:
 		game_ended = true
 		get_tree().paused = true
-		end_screens.show_victory()
+		end_screens.show_victory(get_elapsed_seconds())
 
 
 func _on_retry_pressed() -> void:
@@ -289,14 +323,11 @@ func _physics_process(delta: float) -> void:
 			label_tween.tween_callback(hit_label.queue_free)
 			
 	
-			if score_base >= 0.5:
-				$AudioPlayer.stream = HIT_SFX
-				$AudioPlayer.pitch_scale = score_base
-			else:
-				$AudioPlayer.stream = MISS_SFX
-				$AudioPlayer.pitch_scale = score_base
-
-			$AudioPlayer.play()
+			# Hit/miss SFX, randomly draw from good/bad bag, pitch-shift across score
+			var is_hit: bool = score_base >= get_current_sanity_threshold()
+			sfx_player.stream = good_sfx_bag.draw_cycle() if is_hit else bad_sfx_bag.draw_cycle()
+			sfx_player.pitch_scale = lerp(0.6, 1.4, score_base) + rng.randf_range(-0.05, 0.05)
+			sfx_player.play()
 
 			# SHAPES
 			var intersection_shape: Variant = player.get_intersection_shape(e) # PackedVector2Array | NULL
@@ -538,10 +569,10 @@ func _make_heartbeat() -> AudioStreamWAV:
 		var t := float(i) / sample_rate
 		var sample := 0.0
 
-		# "lub" — sharper, higher
+		# "lub" sharper, higher
 		if t < 0.15:
 			sample = sin(TAU * 60.0 * t) * exp(-t * 18.0)
-		# "dub" — softer, slightly lower, 0.22s later
+		# "dub" softer, slightly lower, 0.22s later
 		elif t >= 0.22:
 			var dt := t - 0.22
 			sample = sin(TAU * 50.0 * dt) * exp(-dt * 14.0) * 0.7
