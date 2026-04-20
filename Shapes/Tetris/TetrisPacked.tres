@@ -3,7 +3,12 @@
 [ext_resource type="Script" uid="uid://dvkje5eqk6kqh" path="res://PackedEnemy.gd" id="1_qq4gm"]
 [ext_resource type="PackedScene" uid="uid://du86rn618ns15" path="res://Shapes/Tetris/Tetris.tscn" id="1_tg408"]
 
+[sub_resource type="Curve" id="Curve_tg408"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
 [resource]
 script = ExtResource("1_qq4gm")
+weight_curve = SubResource("Curve_tg408")
 scene = ExtResource("1_tg408")
 metadata/_custom_type_script = "uid://dvkje5eqk6kqh"

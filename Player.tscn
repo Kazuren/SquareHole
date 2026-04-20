@@ -5,8 +5,9 @@
 [ext_resource type="Script" uid="uid://3g8b7vqjcpgj" path="res://PackedShape.gd" id="3_cxr5p"]
 [ext_resource type="Resource" uid="uid://nmp3181riajc" path="res://Shapes/PlayerShapes/Square.tres" id="4_tdg3f"]
 [ext_resource type="Resource" uid="uid://dshapestar01" path="res://Shapes/PlayerShapes/Star.tres" id="5_dtqjt"]
+[ext_resource type="Resource" uid="uid://ct34iwg4tgloc" path="res://Shapes/PlayerShapes/Tetris.tres" id="6_tdg3f"]
 
-[sub_resource type="ConvexPolygonShape2D" id="ConvexPolygonShape2D_cxr5p"]
+[sub_resource type="ConvexPolygonShape2D" id="ConvexPolygonShape2D_dtqjt"]
 resource_local_to_scene = true
 points = PackedVector2Array(50, 50, -50, 50, -50, -50, 50, -50)
 
@@ -20,14 +21,14 @@ mesh = null
 script = ExtResource("2_kpjcp")
 PLAYER_WALK_SPEED_PER_SECOND = 3.0
 PLAYER_RUN_SPEED_PER_SECOND = 5.0
-shapes = Array[ExtResource("3_cxr5p")]([ExtResource("4_tdg3f"), ExtResource("5_dtqjt")])
+shapes = Array[ExtResource("3_cxr5p")]([ExtResource("4_tdg3f"), ExtResource("5_dtqjt"), ExtResource("6_tdg3f")])
 
 [node name="CollisionShape2D" parent="." index="0" unique_id=976849342]
-shape = SubResource("ConvexPolygonShape2D_cxr5p")
+shape = SubResource("ConvexPolygonShape2D_dtqjt")
 
 [node name="Visual" type="CSGPolygon3D" parent="." index="1" unique_id=1329389281]
-transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 0, 0.5, 0)
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0)
 cast_shadow = 0
 polygon = PackedVector2Array(0.5, 0.5, -0.5, 0.5, -0.5, -0.5, 0.5, -0.5)
-depth = 0.02
+depth = 0.01
 material = SubResource("StandardMaterial3D_visual")

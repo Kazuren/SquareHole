@@ -52,13 +52,21 @@ static func get_area_2d_of_many(shapes: Array[PackedVector2Array]) -> float:
 		total += get_signed_area_2d_of(shape)
 	return abs(total)
 
-	
+
 func get_translated_vectorarray() -> PackedVector2Array:
 	var projected_pos_scaled = Vector2(self.position.x, self.position.z)
 	return self.get_points_2d() \
 		* Transform2D(0, Vector2.ONE * shape_scale, 0, Vector2.ZERO) \
 		* Transform2D(deg_to_rad(-shape_rotation_degrees), Vector2.ONE, 0, Vector2.ZERO) \
 		* Transform2D(0, Vector2.ONE, 0, -projected_pos_scaled)
+
+
+func get_points_local_transformed() -> PackedVector2Array:
+	# Scale + rotation only, no translation. Use together with a node
+	# positioned at the entity's world position for a properly-oriented shape.
+	return self.get_points_2d() \
+		* Transform2D(0, Vector2.ONE * shape_scale, 0, Vector2.ZERO) \
+		* Transform2D(deg_to_rad(-shape_rotation_degrees), Vector2.ONE, 0, Vector2.ZERO)
 
 
 func get_intersection_shape(other_entity: ShapeEntity) -> Variant: # PackedVector2Array | NULL

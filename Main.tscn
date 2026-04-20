@@ -6,9 +6,10 @@
 [ext_resource type="Script" uid="uid://dvkje5eqk6kqh" path="res://PackedEnemy.gd" id="4_3dxm6"]
 [ext_resource type="Material" uid="uid://dgt6ps803lahi" path="res://ShapeMaterials/IntersectionShape.tres" id="4_cm0pq"]
 [ext_resource type="Material" uid="uid://ciwse55k7v1y3" path="res://ShapeMaterials/PreviewMaterial.tres" id="4_wkp8b"]
-[ext_resource type="Resource" uid="uid://ddejnxm31n0fh" path="res://Shapes/Cube/Cube.tres" id="7_03owx"]
+[ext_resource type="Resource" uid="uid://ddejnxm31n0fh" path="res://Shapes/Cube/CubePacked.tres" id="7_03owx"]
 [ext_resource type="Resource" uid="uid://l2rgga6pwi5k" path="res://Shapes/Star/StarPacked.tres" id="7_wkp8b"]
 [ext_resource type="PackedScene" uid="uid://cqqx5yicm0l24" path="res://hit_label.tscn" id="8_trn2v"]
+[ext_resource type="Resource" uid="uid://c4fc1lhgghdri" path="res://Shapes/Tetris/TetrisPacked.tres" id="9_20pc6"]
 [ext_resource type="PackedScene" uid="uid://0ml6tai6bru5" path="res://ShapeCarousel.tscn" id="11_20pc6"]
 
 [sub_resource type="Gradient" id="Gradient_20pc6"]
@@ -61,7 +62,7 @@ xor_material = ExtResource("3_fos0i")
 preview_material = ExtResource("4_wkp8b")
 hit_label_scene = ExtResource("8_trn2v")
 score_color_gradient = SubResource("Gradient_20pc6")
-enemy_scenes = Array[ExtResource("4_3dxm6")]([ExtResource("7_wkp8b"), ExtResource("7_03owx")])
+enemy_scenes = Array[ExtResource("4_3dxm6")]([ExtResource("7_wkp8b"), ExtResource("7_03owx"), ExtResource("9_20pc6")])
 sanity_penalty_curve = SubResource("Curve_03owx")
 rotation_step = 45.0
 
@@ -86,8 +87,9 @@ metadata/_edit_group_ = true
 
 [node name="Player" parent="." unique_id=1842404196 instance=ExtResource("3_r0du0")]
 unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.1, -0.499, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.1, 0, 0)
 material_override = SubResource("StandardMaterial3D_r0du0")
+metadata/_edit_lock_ = true
 
 [node name="SunPivot" type="Node3D" parent="." unique_id=1284798189]
 transform = Transform3D(0.89249134, 0, -0.45106447, 0, 1, 0, 0.45106447, 0, 0.89249134, 0, 0, 0)
