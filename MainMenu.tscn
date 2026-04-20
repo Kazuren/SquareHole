@@ -1,19 +1,34 @@
-[gd_scene load_steps=4 format=3 uid="uid://mainmenu0001"]
+[gd_scene load_steps=5 format=3 uid="uid://ydxs6t7po8h4"]
 
-[ext_resource type="Script" path="res://main_menu.gd" id="1_main"]
+[ext_resource type="Script" uid="uid://cilb86hopk6v2" path="res://main_menu.gd" id="1_main"]
+[ext_resource type="Texture2D" uid="uid://cer1fxgot4ka4" path="res://Art/Cover/squareHoleCover.png" id="2_qoqlk"]
 [ext_resource type="PackedScene" path="res://SettingsPopup.tscn" id="2_sp"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_title"]
 font_size = 64
 
 [node name="MainMenu" type="Control"]
-script = ExtResource("1_main")
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_left = 624.0
+offset_top = 488.0
+offset_right = 624.0
+offset_bottom = 488.0
 grow_horizontal = 2
 grow_vertical = 2
+scale = Vector2(2, 2)
+script = ExtResource("1_main")
+
+[node name="TextureRect" type="TextureRect" parent="."]
+layout_mode = 0
+offset_left = -312.5
+offset_top = -243.0
+offset_right = 648.0
+offset_bottom = 550.5
+texture = ExtResource("2_qoqlk")
+stretch_mode = 4
 
 [node name="MainMenuPanel" type="VBoxContainer" parent="."]
 unique_name_in_owner = true
@@ -23,16 +38,17 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -200.0
-offset_top = -160.0
-offset_right = 200.0
-offset_bottom = 160.0
+offset_left = -935.5
+offset_top = -607.5
+offset_right = -642.5
+offset_bottom = -284.5
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/separation = 16
 alignment = 1
 
 [node name="TitleLabel" type="Label" parent="MainMenuPanel"]
+visible = false
 layout_mode = 2
 text = "Square Hole"
 label_settings = SubResource("LabelSettings_title")
@@ -59,3 +75,4 @@ text = "Exit"
 [node name="SettingsPopup" parent="." instance=ExtResource("2_sp")]
 unique_name_in_owner = true
 visible = false
+layout_mode = 1
