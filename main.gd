@@ -224,6 +224,56 @@ func _ready() -> void:
 	render_sanity()
 	heartbeat_timer.start()
 	_camera_base_position = _camera.position
+	_prewarm_shaders()
+
+
+func _prewarm_shaders() -> void:
+	# First-time shader compilation pauses the frame when a material's shader variant
+	# is encountered. Pre-render tiny dummy instances of every on-hit material so the
+	# first real hit doesn't hitch.
+	var dummy_pos := Vector3(0.0, 2.0, 0.0)
+	var tiny_poly := PackedVector2Array([
+		Vector2(-0.01, -0.01), Vector2(0.01, -0.01),
+		Vector2(0.01, 0.01), Vector2(-0.01, 0.01),
+	])
+
+	var hl: Label3D = hit_label_scene.instantiate()
+	add_child(hl)
+	hl.global_position = dummy_pos
+	hl.text = "."
+	hl.scale = Vector3.ONE * 0.001
+
+	var inter_csg := CSGPolygon3D.new()
+	inter_csg.polygon = tiny_poly
+	inter_csg.depth = 0.01
+	inter_csg.material = intersection_material.duplicate()
+	add_child(inter_csg)
+	inter_csg.global_position = dummy_pos
+
+	var xor_combiner := CSGCombiner3D.new()
+	add_child(xor_combiner)
+	xor_combiner.global_position = dummy_pos
+	var xor_csg := CSGPolygon3D.new()
+	xor_csg.polygon = tiny_poly
+	xor_csg.depth = 0.01
+	xor_csg.material = xor_material.duplicate()
+	xor_combiner.add_child(xor_csg)
+
+	var preview_csg := CSGPolygon3D.new()
+	preview_csg.polygon = tiny_poly
+	preview_csg.depth = 0.01
+	preview_csg.material = preview_material.duplicate()
+	add_child(preview_csg)
+	preview_csg.global_position = dummy_pos
+
+	# Let them render for two frames, then throw them away.
+	await get_tree().process_frame
+	await get_tree().process_frame
+
+	hl.queue_free()
+	inter_csg.queue_free()
+	xor_combiner.queue_free()
+	preview_csg.queue_free()
 
 
 func update_timer() -> void:

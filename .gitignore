@@ -1,6 +1,7 @@
 # Godot 4+ specific ignores
 .godot/
 /android/
+/Build/
 .nomedia
 
 # Godot-specific ignores
