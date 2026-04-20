@@ -17,8 +17,6 @@ extends Node3D
 # game over/win screen(after 20 minutes?)
 # main menu
 
-# rotate player + spawn rotated enemy shapes
-
 # distortion as player loses sanity?
 # protagonist texture near sanity bar, change texture on sanity change
 # export prefixed sanity levels with an associated texture
@@ -29,6 +27,7 @@ extends Node3D
 @export var xor_material: BaseMaterial3D
 @export var preview_material: BaseMaterial3D
 @export var hit_label_scene: PackedScene
+@export var score_color_gradient: Gradient # sampled at score_base (0-1) for the hit label color
 
 
 @onready var player: ShapeEntity = $Player
@@ -194,7 +193,10 @@ func _physics_process(delta: float) -> void:
 			add_child(hit_label)
 			hit_label.global_position = player.global_position
 			hit_label.text = ("%d%%" + ("!" if score_base >= 0.5 else "?!")) % (score_base * 100)
-			hit_label.modulate = lerp(Color.TOMATO, Color.SPRING_GREEN, score_base)
+			if score_color_gradient:
+				hit_label.modulate = score_color_gradient.sample(score_base)
+			else:
+				hit_label.modulate = lerp(Color.TOMATO, Color.SPRING_GREEN, score_base)
 			hit_label.rotate(Vector3.UP, PI * 0.25)
 			hit_label.rotate(Vector3.FORWARD, rng.randf_range(PI * -0.125, PI * 0.125))
 			
