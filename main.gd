@@ -185,7 +185,6 @@ func _ready() -> void:
 
 	render_sanity()
 	heartbeat_timer.start()
-	heartbeat_player.play()
 
 
 func update_timer() -> void:

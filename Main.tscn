@@ -16,7 +16,7 @@
 [ext_resource type="Script" uid="uid://b4ih4s2yo2fwe" path="res://end_screens.gd" id="12_endsc"]
 [ext_resource type="Resource" uid="uid://dn8ha372js3ky" path="res://Shapes/Cylinder/CylinderPacked.tres" id="12_j4qnp"]
 [ext_resource type="Shader" uid="uid://bs8ufwopcg7rk" path="res://signal_distortion.gdshader" id="13_sigdi"]
-[ext_resource type="PackedScene" path="res://SettingsPopup.tscn" id="14_sp"]
+[ext_resource type="PackedScene" uid="uid://er6um4de2hsa" path="res://SettingsPopup.tscn" id="14_sp"]
 [ext_resource type="Script" uid="uid://bolma12vvinrl" path="res://in_game_menu.gd" id="15_igm"]
 
 [sub_resource type="Gradient" id="Gradient_20pc6"]
