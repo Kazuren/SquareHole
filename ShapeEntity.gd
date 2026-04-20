@@ -29,14 +29,27 @@ func get_area_2d() -> float:
 
 
 static func get_area_2d_of(mesh_vertices: PackedVector2Array) -> float:
+	return abs(get_signed_area_2d_of(mesh_vertices))
+
+
+static func get_signed_area_2d_of(mesh_vertices: PackedVector2Array) -> float:
+	# Signed shoelace: outer boundaries and holes have opposite sign,
+	# so summing multiple polygons from clip/exclude operations handles holes correctly.
 	var result := 0.0
 	var num_vertices := mesh_vertices.size()
 
 	for q in range(num_vertices):
 		var p = (q - 1 + num_vertices) % num_vertices
 		result += mesh_vertices[q].cross(mesh_vertices[p])
-	
-	return abs(result) * 0.5 
+
+	return result * 0.5
+
+
+static func get_area_2d_of_many(shapes: Array[PackedVector2Array]) -> float:
+	var total := 0.0
+	for shape in shapes:
+		total += get_signed_area_2d_of(shape)
+	return abs(total)
 
 	
 func get_translated_vectorarray() -> PackedVector2Array:
@@ -60,11 +73,9 @@ func get_intersection_shape(other_entity: ShapeEntity) -> Variant: # PackedVecto
 
 
 func get_intersection_area(other_entity: ShapeEntity) -> float:
-	var intersection_shape = get_intersection_shape(other_entity)
-	if intersection_shape == null:
-		return 0
-	
-	return get_area_2d_of(intersection_shape)
+	var my_points = self.get_translated_vectorarray()
+	var other_points = other_entity.get_translated_vectorarray()
+	return get_area_2d_of_many(Geometry2D.intersect_polygons(my_points, other_points))
 
 
 func get_enemy_uncovered_shapes(other_entity: ShapeEntity) -> Array[PackedVector2Array]:
@@ -85,20 +96,19 @@ func get_player_excess_shapes(other_entity: ShapeEntity) -> Array[PackedVector2A
 
 
 func get_xor_area(other_entity: ShapeEntity) -> float:
-	# for scoring: still sums the full symmetric difference
-	# (enemy uncovered + player excess) regardless of overlap,
-	# so a total miss scores 0% via intersection/(intersection+xor)
-	var total: float = 0.0
-	for shape in Geometry2D.exclude_polygons(
+	# for scoring: full symmetric difference (enemy uncovered + player excess)
+	# signed sum correctly handles annular results (outer CCW + hole CW) that
+	# exclude_polygons returns when one shape fully contains the other
+	return get_area_2d_of_many(Geometry2D.exclude_polygons(
 		other_entity.get_translated_vectorarray(),
 		self.get_translated_vectorarray()
-	):
-		total += get_area_2d_of(shape)
-	return total
+	))
 
 
 enum ScoreFormula { LINEAR, CURVED }
 
+
+# CURVED seems to feel more fun
 func calculate_score_base(other_entity: ShapeEntity, formula: ScoreFormula = ScoreFormula.CURVED) -> float:
 	var i_area = self.get_intersection_area(other_entity)
 	var x_area = self.get_xor_area(other_entity)

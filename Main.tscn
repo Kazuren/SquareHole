@@ -6,8 +6,8 @@
 [ext_resource type="Script" uid="uid://dvkje5eqk6kqh" path="res://PackedEnemy.gd" id="4_3dxm6"]
 [ext_resource type="Material" uid="uid://dgt6ps803lahi" path="res://ShapeMaterials/IntersectionShape.tres" id="4_cm0pq"]
 [ext_resource type="Material" uid="uid://ciwse55k7v1y3" path="res://ShapeMaterials/PreviewMaterial.tres" id="4_wkp8b"]
-[ext_resource type="Resource" uid="uid://b61anstxrel0n" path="res://Shapes/Square.tres" id="5_lgr22"]
 [ext_resource type="Resource" uid="uid://ddejnxm31n0fh" path="res://Shapes/Cube/Cube.tres" id="7_03owx"]
+[ext_resource type="Resource" uid="uid://l2rgga6pwi5k" path="res://Shapes/Star.tres" id="7_wkp8b"]
 [ext_resource type="PackedScene" uid="uid://cqqx5yicm0l24" path="res://hit_label.tscn" id="8_trn2v"]
 
 [sub_resource type="Curve" id="Curve_03owx"]
@@ -53,7 +53,7 @@ intersection_material = ExtResource("4_cm0pq")
 xor_material = ExtResource("3_fos0i")
 preview_material = ExtResource("4_wkp8b")
 hit_label_scene = ExtResource("8_trn2v")
-enemy_scenes = Array[ExtResource("4_3dxm6")]([ExtResource("5_lgr22"), ExtResource("7_03owx")])
+enemy_scenes = Array[ExtResource("4_3dxm6")]([ExtResource("7_wkp8b"), ExtResource("7_03owx")])
 sanity_penalty_curve = SubResource("Curve_03owx")
 
 [node name="Pivot" type="Node3D" parent="." unique_id=556041694]

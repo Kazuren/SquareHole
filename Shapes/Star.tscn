@@ -2,11 +2,11 @@
 
 [ext_resource type="PackedScene" uid="uid://c2fglmehf860l" path="res://Enemy.tscn" id="1_ayhff"]
 
-[sub_resource type="ConvexPolygonShape2D" id="ConvexPolygonShape2D_2pjt0"]
+[sub_resource type="ConvexPolygonShape2D" id="ConvexPolygonShape2D_ayhff"]
 resource_local_to_scene = true
-points = PackedVector2Array(0, -50, -50, 0, 0, 50, 50, 0, 16.2, -16.152)
+points = PackedVector2Array(-48, 0, -16, 16, 0, 48, 16, 16, 50, 0, 16, -16, 0, -48, -16, -16)
 
 [node name="Star" unique_id=56703870 instance=ExtResource("1_ayhff")]
 
 [node name="CollisionShape2D" parent="." index="0" unique_id=976849342]
-shape = SubResource("ConvexPolygonShape2D_2pjt0")
+shape = SubResource("ConvexPolygonShape2D_ayhff")

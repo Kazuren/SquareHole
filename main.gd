@@ -18,11 +18,12 @@ extends Node3D
 # main menu
 
 # player switching shape
-# rotate player, spawn rotated enemy shapes
-# make extra shape area also count towards sanity loss, only exact match is good
+# rotate player + spawn rotated enemy shapes
 
 # distortion as player loses sanity?
 # protagonist texture near sanity bar, change texture on sanity change
+
+# maybe switch from curved to linear score formula as game progresses to aid in difficulty scaling?
 
 @export var intersection_material: BaseMaterial3D
 @export var xor_material: BaseMaterial3D
