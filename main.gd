@@ -208,7 +208,7 @@ func _physics_process(delta: float) -> void:
 			var hit_label: Label3D = hit_label_scene.instantiate()
 			add_child(hit_label)
 			hit_label.global_position = player.global_position
-			hit_label.text = ("%d%%" + ("!" if score_base >= 0.5 else "?!")) % int(round(score_base * 100))
+			hit_label.text = ("%d%%" + ("!" if score_base >= 0.5 else "?!")) % (score_base * 100) #int(round(score_base * 100))
 			if score_color_gradient:
 				hit_label.modulate = score_color_gradient.sample(score_base)
 			else:

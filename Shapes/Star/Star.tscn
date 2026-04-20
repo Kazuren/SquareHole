@@ -3,11 +3,16 @@
 [ext_resource type="PackedScene" uid="uid://c2fglmehf860l" path="res://Enemy.tscn" id="1_h8hqe"]
 [ext_resource type="ArrayMesh" uid="uid://ywsn7srq0ocm" path="res://Shapes/Star/Star.res" id="2_ketn6"]
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_h8hqe"]
+albedo_color = Color(0.98039216, 0.7921569, 0.08627451, 1)
+
 [sub_resource type="ConvexPolygonShape2D" id="ConvexPolygonShape2D_h8hqe"]
 resource_local_to_scene = true
-points = PackedVector2Array(-0.246, 0.08, -0.476, -0.155, -0.152, -0.21, 0, -0.5, 0.152, -0.21, 0.476, -0.155, 0.246, 0.08, 0.294, 0.405, 0, 0.259, -0.294, 0.405)
+points = PackedVector2Array(-0.246, -0.08, -0.476, 0.155, -0.152, 0.21, 0, 0.5, 0.152, 0.21, 0.476, 0.155, 0.246, -0.08, 0.294, -0.405, 0, -0.259, -0.294, -0.405)
 
 [node name="Star" unique_id=56703870 instance=ExtResource("1_h8hqe")]
+transform = Transform3D(1, 0, 0, 0, -1, 8.742278e-08, 0, -8.742278e-08, -1, 0, 0, 0)
+material_override = SubResource("StandardMaterial3D_h8hqe")
 mesh = ExtResource("2_ketn6")
 
 [node name="CollisionShape2D" parent="." index="0" unique_id=976849342]
