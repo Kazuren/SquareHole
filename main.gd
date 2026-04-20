@@ -55,11 +55,27 @@ var SPAWN_HEIGHT: float = 15.0
 
 var rng = RandomNumberGenerator.new()
 
+const SANE_TEXTURE = preload("res://Art/GirlExpressions/squareHoleGirlSane.png")
+const SEMISANE_TEXTURE = preload("res://Art/GirlExpressions/squareHoleGirlSemiSane.png")
+const INSANE_TEXTURE = preload("res://Art/GirlExpressions/squareHoleGirlInsane.png")
+
+func render_girl_sanity_expression(sanityValue: float) -> void:
+	if sanityValue <= 100 and sanityValue >= 67:
+		%GirlSanityExpression.texture = SANE_TEXTURE
+	elif sanityValue < 67 and sanityValue >= 34:
+		%GirlSanityExpression.texture = SEMISANE_TEXTURE
+	else:
+		%GirlSanityExpression.texture = INSANE_TEXTURE
+		
+
 func render_sanity() -> void:
+	#sanity bar
 	$%SanityBar.value = GameStats.sanity * 100;
 	$%SanityLabel.text = "%d%%" % (GameStats.sanity * 100)
-
-
+	
+	#girl sanity expression
+	render_girl_sanity_expression($%SanityBar.value)
+	
 func get_elapsed_seconds() -> float:
 	return (Time.get_ticks_msec() - starting_time_ticks) / 1000.0
 
