@@ -15,6 +15,7 @@
 [ext_resource type="Resource" uid="uid://d4amk2h351fne" path="res://Shapes/Sphere/SpherePacked.tres" id="11_c2ibq"]
 [ext_resource type="Script" uid="uid://b4ih4s2yo2fwe" path="res://end_screens.gd" id="12_endsc"]
 [ext_resource type="Resource" uid="uid://dn8ha372js3ky" path="res://Shapes/Cylinder/CylinderPacked.tres" id="12_j4qnp"]
+[ext_resource type="Shader" uid="uid://bs8ufwopcg7rk" path="res://signal_distortion.gdshader" id="13_sigdi"]
 
 [sub_resource type="Gradient" id="Gradient_20pc6"]
 interpolation_mode = 2
@@ -61,6 +62,17 @@ colors = PackedColorArray(1, 0.47429025, 0.4444329, 1)
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_wkp8b"]
 gradient = SubResource("Gradient_03owx")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_sigdi"]
+shader = ExtResource("13_sigdi")
+shader_parameter/intensity = 0.0
+shader_parameter/chromatic_max = 0.005
+shader_parameter/scanline_max = 0.08
+shader_parameter/noise_max = 0.125
+shader_parameter/roll_max = 0.0030000001425
+shader_parameter/pixelation_max = 0.003
+shader_parameter/scanline_frequency = 420.0
+shader_parameter/roll_frequency = 22.0
 
 [node name="Main" type="Node3D" unique_id=355268627]
 script = ExtResource("1_glv2v")
@@ -220,8 +232,20 @@ offset_right = 1923.0
 offset_bottom = 421.0
 expand_mode = 1
 
+[node name="SignalDistortion" type="CanvasLayer" parent="." unique_id=1001031424]
+
+[node name="ColorRect" type="ColorRect" parent="SignalDistortion" unique_id=317292304]
+material = SubResource("ShaderMaterial_sigdi")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
 [node name="EndScreens" type="CanvasLayer" parent="." unique_id=1407388669]
 process_mode = 3
+layer = 2
 script = ExtResource("12_endsc")
 
 [node name="GameOverScreen" type="Control" parent="EndScreens" unique_id=510567451]

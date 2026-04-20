@@ -27,6 +27,7 @@ extends Node3D
 
 @onready var player: ShapeEntity = $Player
 @onready var end_screens: EndScreens = $EndScreens
+@onready var signal_distortion_rect: ColorRect = $SignalDistortion/ColorRect
 
 @export var enemy_scenes: Array[PackedEnemy]
 
@@ -67,9 +68,12 @@ func render_sanity() -> void:
 	#sanity bar
 	$%SanityBar.value = GameStats.sanity * 100;
 	$%SanityLabel.text = "%d%%" % (GameStats.sanity * 100)
-	
+
 	#girl sanity expression
 	render_girl_sanity_expression($%SanityBar.value)
+
+	#signal distortion — more distortion the lower the sanity
+	(signal_distortion_rect.material as ShaderMaterial).set_shader_parameter("intensity", 1.0 - GameStats.sanity)
 	
 func get_elapsed_seconds() -> float:
 	return elapsed_physics_frames / float(Engine.physics_ticks_per_second)
