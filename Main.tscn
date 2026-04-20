@@ -86,6 +86,7 @@ shader_parameter/roll_frequency = 22.0
 shader_parameter/vignette_max = 0.9
 shader_parameter/vignette_inner = 0.15
 shader_parameter/vignette_outer = 0.7
+shader_parameter/vignette_pulse = 0.0
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_popup"]
 bg_color = Color(0.1, 0.1, 0.13, 0.95)
@@ -126,7 +127,7 @@ transform = Transform3D(0.99999994, 0, 0, 0, 0.99999994, 0, 0, 0, 0.99999994, 0,
 projection = 1
 current = true
 fov = 35.0
-size = 9.0
+size = 10.0
 near = 0.02
 far = 100.0
 

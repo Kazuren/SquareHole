@@ -15,6 +15,7 @@ uniform float roll_frequency = 22.0;
 uniform float vignette_max : hint_range(0.0, 1.0) = 0.6;
 uniform float vignette_inner : hint_range(0.0, 1.0) = 0.3;
 uniform float vignette_outer : hint_range(0.0, 1.5) = 0.9;
+uniform float vignette_pulse : hint_range(0.0, 1.0) = 0.0;
 
 uniform sampler2D screen_tex : hint_screen_texture, repeat_disable, filter_nearest;
 
@@ -52,10 +53,11 @@ void fragment() {
 	float n = hash(uv * 500.0 + TIME);
 	col = mix(col, vec3(n), noise_max * intensity * 0.6);
 
-	// Vignette — darkens the edges, scales with intensity
+	// Vignette — darkens the edges. Both base and pulse scale with sanity loss
+	// (intensity), so at full sanity the screen stays clean with no pulse flicker.
 	float dist = distance(SCREEN_UV, vec2(0.5));
 	float vignette = smoothstep(vignette_inner, vignette_outer, dist);
-	col *= 1.0 - vignette * vignette_max * intensity;
+	col *= 1.0 - vignette * (vignette_max + vignette_pulse) * intensity;
 
 	COLOR = vec4(col, 1.0);
 }

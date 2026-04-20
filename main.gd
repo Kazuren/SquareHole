@@ -4,6 +4,7 @@ extends Node3D
 @onready var heartbeat_player := AudioStreamPlayer.new()
 @onready var heartbeat_timer := Timer.new()
 @onready var sfx_player := AudioStreamPlayer.new()
+@onready var flatline_player := AudioStreamPlayer.new()
 @onready var _camera: Camera3D = $CameraPivot/Camera3D
 
 @export var intersection_material: BaseMaterial3D
@@ -71,6 +72,11 @@ var _shake_time_remaining: float = 0.0
 @export var sanity_flash_loss_color: Color = Color(1.0, 0.4, 0.4)
 @export var sanity_flash_duration: float = 0.25
 var _sanity_bar_tween: Tween
+
+# Vignette pulse synced to each heartbeat, brief extra darkening, independent of sanity.
+@export_range(0.0, 1.0, 0.01) var vignette_pulse_max: float = 0.15
+@export var vignette_pulse_duration: float = 0.18
+var _vignette_pulse_tween: Tween
 
 var enemies: Array[ShapeEntity] = []
 var enemy_previews: Dictionary = {} # ShapeEntity -> CSGPolygon3D
@@ -193,9 +199,16 @@ func _ready() -> void:
 	heartbeat_player.stream = _make_heartbeat()
 	add_child(heartbeat_timer)
 	heartbeat_timer.timeout.connect(func() -> void: heartbeat_player.play())
+	heartbeat_timer.timeout.connect(_pulse_vignette)
 
 	sfx_player.bus = "SFX"
 	add_child(sfx_player)
+
+	# Flatline must keep playing when the tree is paused (game over pauses the tree).
+	flatline_player.bus = "SFX"
+	flatline_player.process_mode = Node.PROCESS_MODE_ALWAYS
+	add_child(flatline_player)
+	flatline_player.stream = _make_flatline()
 
 	good_sfx_bag = Bag.new(rng)
 	good_sfx_bag.add(GOOD_SFX_1)
@@ -298,6 +311,17 @@ func flash_sanity_bar(flash_color: Color) -> void:
 	_sanity_bar_tween.tween_property(bar, "modulate", Color.WHITE, sanity_flash_duration)
 
 
+func _pulse_vignette() -> void:
+	if vignette_pulse_max <= 0.0 or vignette_pulse_duration <= 0.0:
+		return
+	if _vignette_pulse_tween and _vignette_pulse_tween.is_running():
+		_vignette_pulse_tween.kill()
+	var mat := signal_distortion_rect.material as ShaderMaterial
+	mat.set_shader_parameter("vignette_pulse", vignette_pulse_max)
+	_vignette_pulse_tween = create_tween()
+	_vignette_pulse_tween.tween_property(mat, "shader_parameter/vignette_pulse", 0.0, vignette_pulse_duration)
+
+
 func check_end_conditions() -> void:
 	if game_ended:
 		return
@@ -305,6 +329,10 @@ func check_end_conditions() -> void:
 		game_ended = true
 		get_tree().paused = true
 		end_screens.show_game_over(get_elapsed_seconds())
+		# Kill the heartbeat, start the flatline.
+		heartbeat_timer.stop()
+		heartbeat_player.stop()
+		flatline_player.play()
 		return
 	if not endless_mode and get_elapsed_seconds() >= game_duration:
 		game_ended = true
@@ -667,4 +695,31 @@ func _make_heartbeat() -> AudioStreamWAV:
 	stream.mix_rate = sample_rate
 	stream.stereo = false
 	stream.loop_mode = AudioStreamWAV.LOOP_DISABLED
+	return stream
+
+
+func _make_flatline() -> AudioStreamWAV:
+	# Sustained warm tone: 750 Hz fundamental + softer octave below for body.
+	# 4704 samples @44.1 kHz fits 80 cycles of 750 Hz and 40 cycles of 375 Hz,
+	# so both the fundamental and the octave-below harmonic loop seamlessly.
+	var sample_rate := 44100
+	var freq := 750.0
+	var total_samples := 4704
+	var data := PackedByteArray()
+	data.resize(total_samples * 2)
+
+	for i in total_samples:
+		var t := float(i) / sample_rate
+		# Fundamental + octave-below harmonic = warmer, less piercing than a bare sine.
+		var sample := (sin(TAU * freq * t) * 0.7 + sin(TAU * (freq * 0.5) * t) * 0.3) * 0.18
+		var v := int(clamp(sample, -1.0, 1.0) * 32767)
+		data.encode_s16(i * 2, v)
+
+	var stream := AudioStreamWAV.new()
+	stream.data = data
+	stream.format = AudioStreamWAV.FORMAT_16_BITS
+	stream.mix_rate = sample_rate
+	stream.stereo = false
+	stream.loop_mode = AudioStreamWAV.LOOP_FORWARD
+	stream.loop_end = total_samples
 	return stream
