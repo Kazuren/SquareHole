@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="PackedEnemy" format=3 uid="uid://d4amk2h351fne"]
+
+[ext_resource type="Script" uid="uid://dvkje5eqk6kqh" path="res://PackedEnemy.gd" id="1_0sd0a"]
+[ext_resource type="PackedScene" uid="uid://etnenjh66qbu" path="res://Shapes/Sphere/Sphere.tscn" id="1_odadw"]
+
+[sub_resource type="Curve" id="Curve_odadw"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.5), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[resource]
+script = ExtResource("1_0sd0a")
+weight_curve = SubResource("Curve_odadw")
+scene = ExtResource("1_odadw")
+metadata/_custom_type_script = "uid://dvkje5eqk6kqh"

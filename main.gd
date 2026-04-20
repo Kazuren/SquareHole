@@ -18,6 +18,12 @@ extends Node3D
 
 # maybe switch from curved to linear score formula as game progresses to aid in difficulty scaling?
 
+
+@onready var heartbeat_player := AudioStreamPlayer.new()
+@onready var heartbeat_timer := Timer.new()
+
+
+
 @export var intersection_material: BaseMaterial3D
 @export var xor_material: BaseMaterial3D
 @export var preview_material: BaseMaterial3D
@@ -27,6 +33,7 @@ extends Node3D
 
 @onready var player: ShapeEntity = $Player
 @onready var end_screens: EndScreens = $EndScreens
+@onready var signal_distortion_rect: ColorRect = $SignalDistortion/ColorRect
 
 @export var enemy_scenes: Array[PackedEnemy]
 
@@ -43,6 +50,12 @@ var SANITY_MULTIPLIER: float = 0.05 # in percent
 @export_range(0.1, 1.0, 0.05) var enemy_shape_scale: float = 1.0
 @export_range(0.0, 5.0, 0.1) var magnet_radius: float = 0.2
 @export_range(0.0, 10.0, 0.1) var magnet_strength: float = 3.0
+
+@export var heartbeat_min_bpm: float = 60.0
+@export var heartbeat_max_bpm: float = 133.0
+
+# x -> insanity, y -> bpm
+@export var heartbeat_bpm_curve: Curve
 
 var enemies: Array[ShapeEntity] = []
 var enemy_previews: Dictionary = {} # ShapeEntity -> CSGPolygon3D
@@ -70,10 +83,19 @@ func render_sanity() -> void:
 	#sanity bar
 	$%SanityBar.value = GameStats.sanity * 100;
 	$%SanityLabel.text = "%d%%" % (GameStats.sanity * 100)
-	
+
 	#girl sanity expression
 	render_girl_sanity_expression($%SanityBar.value)
-	
+
+	#signal distortion — more distortion the lower the sanity
+	(signal_distortion_rect.material as ShaderMaterial).set_shader_parameter("intensity", 1.0 - GameStats.sanity)
+
+	#heartbeat — BPM speeds up as sanity drops (pitch unchanged)
+	var panic: float = 1.0 - GameStats.sanity
+	var curved_panic: float = heartbeat_bpm_curve.sample(panic) if heartbeat_bpm_curve else panic
+	var bpm: float = lerp(heartbeat_min_bpm, heartbeat_max_bpm, curved_panic)
+	heartbeat_timer.wait_time = 60.0 / bpm
+
 func get_elapsed_seconds() -> float:
 	return elapsed_physics_frames / float(Engine.physics_ticks_per_second)
 
@@ -122,6 +144,14 @@ func _ready() -> void:
 
 	end_screens.retry_pressed.connect(_on_retry_pressed)
 	end_screens.endless_mode_pressed.connect(_on_endless_mode_pressed)
+
+	add_child(heartbeat_player)
+	heartbeat_player.stream = _make_heartbeat()
+	add_child(heartbeat_timer)
+	heartbeat_timer.timeout.connect(func() -> void: heartbeat_player.play())
+	render_sanity()
+	heartbeat_timer.start()
+	heartbeat_player.play()
 
 
 func update_timer() -> void:
@@ -495,3 +525,34 @@ func pick_enemy_rotation(pack: PackedEnemy) -> float:
 		if roll < acc:
 			return pack.rotation_angles[i]
 	return 0.0
+
+
+
+func _make_heartbeat() -> AudioStreamWAV:
+	var sample_rate := 44100
+	var total_samples := int(sample_rate * 0.4)
+	var data := PackedByteArray()
+	data.resize(total_samples * 2)  # 16-bit mono = 2 bytes/sample
+
+	for i in total_samples:
+		var t := float(i) / sample_rate
+		var sample := 0.0
+
+		# "lub" — sharper, higher
+		if t < 0.15:
+			sample = sin(TAU * 60.0 * t) * exp(-t * 18.0)
+		# "dub" — softer, slightly lower, 0.22s later
+		elif t >= 0.22:
+			var dt := t - 0.22
+			sample = sin(TAU * 50.0 * dt) * exp(-dt * 14.0) * 0.7
+
+		var v := int(clamp(sample, -1.0, 1.0) * 32767)
+		data.encode_s16(i * 2, v)
+
+	var stream := AudioStreamWAV.new()
+	stream.data = data
+	stream.format = AudioStreamWAV.FORMAT_16_BITS
+	stream.mix_rate = sample_rate
+	stream.stereo = false
+	stream.loop_mode = AudioStreamWAV.LOOP_DISABLED
+	return stream

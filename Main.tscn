@@ -10,8 +10,12 @@
 [ext_resource type="Resource" uid="uid://l2rgga6pwi5k" path="res://Shapes/Star/StarPacked.tres" id="7_wkp8b"]
 [ext_resource type="PackedScene" uid="uid://cqqx5yicm0l24" path="res://hit_label.tscn" id="8_trn2v"]
 [ext_resource type="Resource" uid="uid://c4fc1lhgghdri" path="res://Shapes/Tetris/TetrisPacked.tres" id="9_20pc6"]
+[ext_resource type="Resource" uid="uid://b7fcwcrpmocan" path="res://Shapes/CubeArch/CubeArchPacked.tres" id="10_c6i3y"]
 [ext_resource type="PackedScene" uid="uid://0ml6tai6bru5" path="res://ShapeCarousel.tscn" id="11_20pc6"]
+[ext_resource type="Resource" uid="uid://d4amk2h351fne" path="res://Shapes/Sphere/SpherePacked.tres" id="11_c2ibq"]
 [ext_resource type="Script" uid="uid://b4ih4s2yo2fwe" path="res://end_screens.gd" id="12_endsc"]
+[ext_resource type="Resource" uid="uid://dn8ha372js3ky" path="res://Shapes/Cylinder/CylinderPacked.tres" id="12_j4qnp"]
+[ext_resource type="Shader" uid="uid://bs8ufwopcg7rk" path="res://signal_distortion.gdshader" id="13_sigdi"]
 
 [sub_resource type="Gradient" id="Gradient_20pc6"]
 interpolation_mode = 2
@@ -24,6 +28,10 @@ _limits = [1.0, 10.0, 0.0, 1.0]
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 10), 0.0, 0.0, 0, 0]
 point_count = 2
 
+[sub_resource type="Curve" id="Curve_fpfj3"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(1, 1), 1.4, 0.0, 0, 0]
+point_count = 2
+
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_uu6xs"]
 albedo_color = Color(0.62967473, 0.62967473, 0.6296747, 1)
 albedo_texture_force_srgb = true
@@ -33,6 +41,9 @@ uv1_triplanar = true
 albedo_color = Color(0.9966598, 0.34354967, 1, 1)
 
 [sub_resource type="Environment" id="Environment_r0du0"]
+ambient_light_source = 2
+ambient_light_color = Color(0.74509805, 0.7490196, 0.77254903, 1)
+ambient_light_energy = 0.4
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_fos0i"]
 top_radius = 8.0
@@ -56,24 +67,35 @@ colors = PackedColorArray(1, 0.47429025, 0.4444329, 1)
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_wkp8b"]
 gradient = SubResource("Gradient_03owx")
 
-[node name="Main" type="Node3D"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_sigdi"]
+shader = ExtResource("13_sigdi")
+shader_parameter/intensity = 0.0
+shader_parameter/chromatic_max = 0.005
+shader_parameter/scanline_max = 0.08
+shader_parameter/noise_max = 0.125
+shader_parameter/roll_max = 0.0030000001425
+shader_parameter/pixelation_max = 0.003
+shader_parameter/scanline_frequency = 420.0
+shader_parameter/roll_frequency = 22.0
+
+[node name="Main" type="Node3D" unique_id=355268627]
 script = ExtResource("1_glv2v")
 intersection_material = ExtResource("4_cm0pq")
 xor_material = ExtResource("3_fos0i")
 preview_material = ExtResource("4_wkp8b")
 hit_label_scene = ExtResource("8_trn2v")
 score_color_gradient = SubResource("Gradient_20pc6")
-enemy_scenes = Array[ExtResource("4_3dxm6")]([ExtResource("7_wkp8b"), ExtResource("7_03owx"), ExtResource("9_20pc6")])
+enemy_scenes = Array[ExtResource("4_3dxm6")]([ExtResource("7_wkp8b"), ExtResource("7_03owx"), ExtResource("9_20pc6"), ExtResource("10_c6i3y"), ExtResource("11_c2ibq"), ExtResource("12_j4qnp")])
 game_duration = 600.0
 sanity_penalty_curve = SubResource("Curve_03owx")
-enemy_shape_scale = null
-magnet_radius = null
-magnet_strength = null
+heartbeat_min_bpm = 20.0
+heartbeat_max_bpm = 120.0
+heartbeat_bpm_curve = SubResource("Curve_fpfj3")
 
-[node name="Pivot" type="Node3D" parent="."]
+[node name="CameraPivot" type="Node3D" parent="." unique_id=47895836]
 transform = Transform3D(0.7071067, -0.3535534, 0.61237234, 0, 0.8660254, 0.5, -0.7071067, -0.3535534, 0.61237234, 0, 0, 0)
 
-[node name="Camera3D" type="Camera3D" parent="Pivot"]
+[node name="Camera3D" type="Camera3D" parent="CameraPivot" unique_id=343791336]
 transform = Transform3D(0.99999994, 0, 0, 0, 0.99999994, 0, 0, 0, 0.99999994, 0, 0, 14)
 projection = 1
 current = true
@@ -95,11 +117,22 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.1, 0, 0)
 material_override = SubResource("StandardMaterial3D_r0du0")
 metadata/_edit_lock_ = true
 
-[node name="SunPivot" type="Node3D" parent="."]
+[node name="FillLightPivot" type="Node3D" parent="." unique_id=424021540]
+transform = Transform3D(0.4067366, 0.6459742, -0.6459742, 0, 0.70710677, 0.70710677, 0.9135455, -0.2876062, 0.2876062, 0, 0, 0)
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="FillLightPivot" unique_id=1585231140]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 30, 0)
+light_color = Color(1, 0.89411765, 0.88235295, 1)
+light_energy = 0.3
+light_indirect_energy = 0.3
+light_volumetric_fog_energy = 0.3
+
+[node name="SunPivot" type="Node3D" parent="." unique_id=771010700]
 transform = Transform3D(0.89249134, 0, -0.45106447, 0, 1, 0, 0.45106447, 0, 0.89249134, 0, 0, 0)
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="SunPivot"]
 transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 500, 0)
+light_color = Color(1, 0.98039216, 0.9411765, 1)
 shadow_enabled = true
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
@@ -107,6 +140,7 @@ environment = SubResource("Environment_r0du0")
 
 [node name="SpawnerMesh" type="MeshInstance3D" parent="."]
 unique_name_in_owner = true
+visible = false
 mesh = SubResource("CylinderMesh_fos0i")
 metadata/_edit_lock_ = true
 
@@ -205,8 +239,20 @@ offset_right = 1923.0
 offset_bottom = 421.0
 expand_mode = 1
 
-[node name="EndScreens" type="CanvasLayer" parent="."]
+[node name="SignalDistortion" type="CanvasLayer" parent="." unique_id=1001031424]
+
+[node name="ColorRect" type="ColorRect" parent="SignalDistortion" unique_id=317292304]
+material = SubResource("ShaderMaterial_sigdi")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="EndScreens" type="CanvasLayer" parent="." unique_id=1407388669]
 process_mode = 3
+layer = 2
 script = ExtResource("12_endsc")
 
 [node name="GameOverScreen" type="Control" parent="EndScreens"]
