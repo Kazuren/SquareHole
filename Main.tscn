@@ -114,6 +114,9 @@ sanity_penalty_curve = SubResource("Curve_03owx")
 heartbeat_min_bpm = 20.0
 heartbeat_max_bpm = 120.0
 heartbeat_bpm_curve = SubResource("Curve_fpfj3")
+hitstop_duration = 0.0
+hitstop_time_scale = 0.0
+sanity_flash_gain_color = Color(0.4627451, 1, 0.47843137, 1)
 
 [node name="CameraPivot" type="Node3D" parent="." unique_id=47895836]
 transform = Transform3D(0.7071067, -0.3535534, 0.61237234, 0, 0.8660254, 0.5, -0.7071067, -0.3535534, 0.61237234, 0, 0, 0)

@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://d0kwxpwcnc5e3" path="res://ShapeCarousel.gd" id="1_carousel"]
 
 [node name="ShapeCarousel" type="Control" unique_id=1592716139]
+layout_mode = 3
 anchors_preset = 7
 anchor_left = 0.5
 anchor_top = 1.0
@@ -15,3 +16,5 @@ offset_bottom = -20.0
 grow_horizontal = 2
 grow_vertical = 0
 script = ExtResource("1_carousel")
+current_color = Color(0.9607843, 1, 0.98039216, 1)
+side_color = Color(0.96, 1, 0.98, 0.4)

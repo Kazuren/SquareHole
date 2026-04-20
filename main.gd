@@ -4,6 +4,7 @@ extends Node3D
 @onready var heartbeat_player := AudioStreamPlayer.new()
 @onready var heartbeat_timer := Timer.new()
 @onready var sfx_player := AudioStreamPlayer.new()
+@onready var _camera: Camera3D = $CameraPivot/Camera3D
 
 @export var intersection_material: BaseMaterial3D
 @export var xor_material: BaseMaterial3D
@@ -50,6 +51,26 @@ var sanity_gain_streak: float = 0.0
 
 # x -> insanity, y -> bpm
 @export var heartbeat_bpm_curve: Curve
+
+# Camera shake
+# Shake amount scales with (1 - score_base): perfect hits don't shake, misses shake max.
+@export var shake_max_strength: float = 0.15 # world-units of camera jitter at full strength
+@export var shake_duration: float = 0.2 # seconds for shake to decay to zero
+
+# Hitstop freezes the tree briefly on near-perfect hits for impact.
+@export var hitstop_threshold: float = 0.95 # minimum score_base that triggers hitstop
+@export var hitstop_duration: float = 0.08 # real-time seconds of frozen / slowed playback
+@export_range(0.0, 1.0, 0.01) var hitstop_time_scale: float = 0.05 # 0 = frozen, 1 = normal
+
+var _camera_base_position: Vector3
+var _shake_strength_current: float = 0.0
+var _shake_time_remaining: float = 0.0
+
+# Sanity bar flash — green on gain, red on loss, fades back to white.
+@export var sanity_flash_gain_color: Color = Color(0.4, 1.0, 0.4)
+@export var sanity_flash_loss_color: Color = Color(1.0, 0.4, 0.4)
+@export var sanity_flash_duration: float = 0.25
+var _sanity_bar_tween: Tween
 
 var enemies: Array[ShapeEntity] = []
 var enemy_previews: Dictionary = {} # ShapeEntity -> CSGPolygon3D
@@ -185,6 +206,7 @@ func _ready() -> void:
 
 	render_sanity()
 	heartbeat_timer.start()
+	_camera_base_position = _camera.position
 
 
 func update_timer() -> void:
@@ -225,9 +247,55 @@ func spawn_enemy() -> void:
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(_delta: float) -> void:
+func _process(delta: float) -> void:
 	update_timer()
 	check_end_conditions()
+	_update_shake(delta)
+
+
+func _update_shake(delta: float) -> void:
+	if _shake_time_remaining <= 0.0:
+		return
+	_shake_time_remaining -= delta
+	if _shake_time_remaining <= 0.0:
+		_camera.position = _camera_base_position
+		return
+	var decay: float = _shake_time_remaining / shake_duration
+	var amp: float = _shake_strength_current * decay
+	_camera.position = _camera_base_position + Vector3(
+		rng.randf_range(-amp, amp),
+		rng.randf_range(-amp, amp),
+		0.0
+	)
+
+
+func apply_camera_shake(amount: float) -> void:
+	# `amount` is 0-1, scaled by shake_max_strength.
+	if amount <= 0.0 or shake_max_strength <= 0.0 or shake_duration <= 0.0:
+		return
+	_shake_strength_current = amount * shake_max_strength
+	_shake_time_remaining = shake_duration
+
+
+func apply_hitstop() -> void:
+	if hitstop_duration <= 0.0:
+		return
+	Engine.time_scale = hitstop_time_scale
+	# process_always=true + ignore_time_scale=true so this timer runs in real time
+	# regardless of our slowed Engine.time_scale.
+	await get_tree().create_timer(hitstop_duration, true, false, true).timeout
+	Engine.time_scale = 1.0
+
+
+func flash_sanity_bar(flash_color: Color) -> void:
+	if sanity_flash_duration <= 0.0:
+		return
+	if _sanity_bar_tween and _sanity_bar_tween.is_running():
+		_sanity_bar_tween.kill()
+	var bar: TextureProgressBar = $%SanityBar
+	bar.modulate = flash_color
+	_sanity_bar_tween = create_tween()
+	_sanity_bar_tween.tween_property(bar, "modulate", Color.WHITE, sanity_flash_duration)
 
 
 func check_end_conditions() -> void:
@@ -293,14 +361,28 @@ func _physics_process(delta: float) -> void:
 
 			# SCORE
 			var score_base: float = player.calculate_score_base(e)
-			GameStats.sanity = clamp(GameStats.sanity + calculate_sanity_change(score_base), 0, 1)
+			var sanity_change: float = calculate_sanity_change(score_base)
+			GameStats.sanity = clamp(GameStats.sanity + sanity_change, 0, 1)
 			render_sanity()
+
+			# shake scales with score.
+			apply_camera_shake(1.0 - score_base)
+
+			# hitstop on near-perfect hits.
+			if score_base >= hitstop_threshold:
+				apply_hitstop()
+
+			# Sanity bar flashes green/red based on the sign of the change.
+			if sanity_change > 0.0:
+				flash_sanity_bar(sanity_flash_gain_color)
+			elif sanity_change < 0.0:
+				flash_sanity_bar(sanity_flash_loss_color)
 
 			# HIT LABEL
 			var hit_label: Label3D = hit_label_scene.instantiate()
 			add_child(hit_label)
 			hit_label.global_position = player.global_position
-			hit_label.text = ("%d%%" + ("!" if score_base >= 0.5 else "?!")) % (score_base * 100) #int(round(score_base * 100))
+			hit_label.text = ("%d%%" + ("!" if score_base >= get_current_sanity_threshold() else "?!")) % (score_base * 100)
 			if score_color_gradient:
 				hit_label.modulate = score_color_gradient.sample(score_base)
 			else:
