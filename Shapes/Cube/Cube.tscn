@@ -1,18 +1,18 @@
 [gd_scene format=3 uid="uid://b028ugqcxa2j"]
 
 [ext_resource type="PackedScene" uid="uid://c2fglmehf860l" path="res://Enemy.tscn" id="1_y4sij"]
-[ext_resource type="ArrayMesh" uid="uid://d3f50td64ib5y" path="res://Shapes/Cube/cube.res" id="2_1dlly"]
+[ext_resource type="ArrayMesh" uid="uid://cx677yd1st4i3" path="res://Shapes/Cube/Cube.res" id="2_o734h"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_1dlly"]
 albedo_color = Color(1, 0.7470509, 0.57002854, 1)
 
 [sub_resource type="ConvexPolygonShape2D" id="ConvexPolygonShape2D_o734h"]
 resource_local_to_scene = true
-points = PackedVector2Array(50, -50, -50, -50, -50, 50, 50, 50)
+points = PackedVector2Array(0.5, 0.5, -0.5, 0.5, -0.5, -0.5, 0.5, -0.5)
 
 [node name="Cube" unique_id=56703870 instance=ExtResource("1_y4sij")]
 material_override = SubResource("StandardMaterial3D_1dlly")
-mesh = ExtResource("2_1dlly")
+mesh = ExtResource("2_o734h")
 
 [node name="CollisionShape2D" parent="." index="0" unique_id=976849342]
 shape = SubResource("ConvexPolygonShape2D_o734h")

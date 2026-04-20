@@ -1,7 +1,7 @@
 [gd_resource type="Resource" script_class="PackedEnemy" format=3 uid="uid://l2rgga6pwi5k"]
 
-[ext_resource type="Script" uid="uid://dvkje5eqk6kqh" path="res://PackedEnemy.gd" id="1_4lvdf"]
-[ext_resource type="PackedScene" uid="uid://dyh1tf6hqo3eh" path="res://Shapes/Star.tscn" id="1_m4571"]
+[ext_resource type="PackedScene" uid="uid://dyh1tf6hqo3eh" path="res://Shapes/Star/Star.tscn" id="1_234gd"]
+[ext_resource type="Script" uid="uid://dvkje5eqk6kqh" path="res://PackedEnemy.gd" id="2_ww84u"]
 
 [sub_resource type="Curve" id="Curve_m4571"]
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.5), 0.0, 0.0, 0, 0]
@@ -16,8 +16,8 @@ _data = [Vector2(0.025, 0), 0.0, 0.0, 0, 0, Vector2(1, 0.5), 0.0, 0.0, 0, 0]
 point_count = 2
 
 [resource]
-script = ExtResource("1_4lvdf")
+script = ExtResource("2_ww84u")
 weight_curve = SubResource("Curve_ih7ql")
-scene = ExtResource("1_m4571")
+scene = ExtResource("1_234gd")
 rotation_weight_curves = Array[Curve]([SubResource("Curve_m4571"), SubResource("Curve_pm30i"), SubResource("Curve_m4571"), SubResource("Curve_pm30i"), SubResource("Curve_m4571"), SubResource("Curve_pm30i"), SubResource("Curve_m4571"), SubResource("Curve_pm30i")])
 metadata/_custom_type_script = "uid://dvkje5eqk6kqh"

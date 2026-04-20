@@ -1,10 +1,6 @@
 class_name ShapeEntity
 extends MeshInstance3D
 
-# baseline scale equal to 1 UNIT for polygons
-const baseline_scale: int = 100
-const baseline_vector: Vector2 = Vector2(100, 100)
-
 var shape_scale: float = 1.0:
 	set(value):
 		shape_scale = value
@@ -58,12 +54,11 @@ static func get_area_2d_of_many(shapes: Array[PackedVector2Array]) -> float:
 
 	
 func get_translated_vectorarray() -> PackedVector2Array:
-	var projected_pos_scaled = Vector2(self.position.x, self.position.z) * baseline_scale
+	var projected_pos_scaled = Vector2(self.position.x, self.position.z)
 	return self.get_points_2d() \
 		* Transform2D(0, Vector2.ONE * shape_scale, 0, Vector2.ZERO) \
 		* Transform2D(deg_to_rad(-shape_rotation_degrees), Vector2.ONE, 0, Vector2.ZERO) \
-		* Transform2D(0, Vector2.ONE, 0, -projected_pos_scaled) \
-		* Transform2D(0, Vector2.ONE / baseline_scale, 0, Vector2.ZERO)
+		* Transform2D(0, Vector2.ONE, 0, -projected_pos_scaled)
 
 
 func get_intersection_shape(other_entity: ShapeEntity) -> Variant: # PackedVector2Array | NULL
@@ -72,7 +67,6 @@ func get_intersection_shape(other_entity: ShapeEntity) -> Variant: # PackedVecto
 	
 	var intersection_shapes: Array[PackedVector2Array] = Geometry2D.intersect_polygons(my_shape_translated_points, other_shape_translated_points)
 	if intersection_shapes.size() > 0:
-	
 		return intersection_shapes[0] 
 	else:
 		return null

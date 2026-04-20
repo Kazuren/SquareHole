@@ -1,0 +1,14 @@
+[gd_scene format=3 uid="uid://du86rn618ns15"]
+
+[ext_resource type="PackedScene" uid="uid://c2fglmehf860l" path="res://Enemy.tscn" id="1_t23dy"]
+[ext_resource type="ArrayMesh" uid="uid://4mahs4v0nbfj" path="res://Shapes/Tetris/Tetris.res" id="2_6dspp"]
+
+[sub_resource type="ConvexPolygonShape2D" id="ConvexPolygonShape2D_6dspp"]
+resource_local_to_scene = true
+points = PackedVector2Array(50, 50, -50, 50, -50, -50, 50, -50)
+
+[node name="Enemy" unique_id=56703870 instance=ExtResource("1_t23dy")]
+mesh = ExtResource("2_6dspp")
+
+[node name="CollisionShape2D" parent="." index="0" unique_id=976849342]
+shape = SubResource("ConvexPolygonShape2D_6dspp")

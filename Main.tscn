@@ -7,7 +7,7 @@
 [ext_resource type="Material" uid="uid://dgt6ps803lahi" path="res://ShapeMaterials/IntersectionShape.tres" id="4_cm0pq"]
 [ext_resource type="Material" uid="uid://ciwse55k7v1y3" path="res://ShapeMaterials/PreviewMaterial.tres" id="4_wkp8b"]
 [ext_resource type="Resource" uid="uid://ddejnxm31n0fh" path="res://Shapes/Cube/Cube.tres" id="7_03owx"]
-[ext_resource type="Resource" uid="uid://l2rgga6pwi5k" path="res://Shapes/Star.tres" id="7_wkp8b"]
+[ext_resource type="Resource" uid="uid://l2rgga6pwi5k" path="res://Shapes/Star/StarPacked.tres" id="7_wkp8b"]
 [ext_resource type="PackedScene" uid="uid://cqqx5yicm0l24" path="res://hit_label.tscn" id="8_trn2v"]
 [ext_resource type="PackedScene" uid="uid://0ml6tai6bru5" path="res://ShapeCarousel.tscn" id="11_20pc6"]
 

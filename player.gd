@@ -68,6 +68,7 @@ func apply_shape(idx: int) -> void:
 	# Collision points are in 100-unit space, scale down to world scale
 	var visual_points := PackedVector2Array()
 	for p in shape.points:
-		visual_points.append(p / float(baseline_scale))
+		visual_points.append(p)
+		#visual_points.append(p / float(baseline_scale))
 	visual.polygon = visual_points
 	shape_changed.emit(idx)

@@ -57,9 +57,8 @@ func _on_shape_changed(idx: int) -> void:
 
 
 func _set_slot_shape(slot: Polygon2D, shape: PackedShape) -> void:
-	# scale 100-unit polygon points to `shape_size` pixels
 	var pts := PackedVector2Array()
-	var k := shape_size / float(ShapeEntity.baseline_scale)
+	var k := shape_size
 	for p in shape.points:
 		pts.append(p * k)
 	slot.polygon = pts

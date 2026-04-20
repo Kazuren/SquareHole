@@ -1,0 +1,99 @@
+[remap]
+
+importer="scene"
+importer_version=1
+type="PackedScene"
+uid="uid://b7w0s2piyrkfi"
+path="res://.godot/imported/Shapes.glb-2f1af23a2b0be62b8444c34384f008cd.scn"
+
+[deps]
+
+source_file="res://BlenderFiles/Shapes.glb"
+dest_files=["res://.godot/imported/Shapes.glb-2f1af23a2b0be62b8444c34384f008cd.scn"]
+
+[params]
+
+nodes/root_type=""
+nodes/root_name=""
+nodes/root_script=null
+nodes/apply_root_scale=true
+nodes/root_scale=1.0
+nodes/import_as_skeleton_bones=false
+nodes/use_name_suffixes=true
+nodes/use_node_type_suffixes=true
+meshes/ensure_tangents=true
+meshes/generate_lods=true
+meshes/create_shadow_meshes=true
+meshes/light_baking=1
+meshes/lightmap_texel_size=0.2
+meshes/force_disable_compression=false
+skins/use_named_skins=true
+animation/import=true
+animation/fps=30
+animation/trimming=false
+animation/remove_immutable_tracks=true
+animation/import_rest_as_RESET=false
+import_script/path=""
+materials/extract=0
+materials/extract_format=0
+materials/extract_path=""
+_subresources={
+"meshes": {
+"Shapes_Cube": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://Shapes/Cube/Cube.res",
+"save_to_file/path": "uid://cx677yd1st4i3"
+},
+"Shapes_CubePyramid": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://Shapes/CubePyramid/CubePyramid.res",
+"save_to_file/path": "uid://jroq4n7ag3or"
+},
+"Shapes_Cylinder": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://Shapes/Cylinder/Cylinder.res",
+"save_to_file/path": "uid://dkjlmwkemexhb"
+},
+"Shapes_Sphere": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://Shapes/Sphere/Sphere.res",
+"save_to_file/path": "uid://jj0axnen04xi"
+},
+"Shapes_Star": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://Shapes/Star/Star.res",
+"save_to_file/path": "uid://ywsn7srq0ocm"
+},
+"Shapes_Tetris": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://Shapes/Tetris/Tetris.res",
+"save_to_file/path": "uid://4mahs4v0nbfj"
+}
+}
+}
+gltf/naming_version=2
+gltf/embedded_image_handling=1

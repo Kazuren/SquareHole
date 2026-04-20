@@ -9,16 +9,20 @@ extends Node3D
 #THINGS TO FIX:
 
 # fairness of game, way to spawn objects in a more fair way
-# add gravity field concept to pull far away objects closer to player (we set a min distance away from player) for fairness
 # sounds: 100% match, 0% match, 100->50% lessen pitch, 49->0% lessen pitch
 # more shapes
 
+
+# add gravity field concept to pull far away objects closer to player (we set a min distance away from player) for fairness
 # game over/win screen(after 20 minutes?)
 # main menu
 
 # distortion as player loses sanity?
 # protagonist texture near sanity bar, change texture on sanity change
 # export prefixed sanity levels with an associated texture
+
+# set rotation steps for each object specifically and for each player shape as well, so that for example the square only has 0 deg and 45 deg
+# similarly for star etc.
 
 # maybe switch from curved to linear score formula as game progresses to aid in difficulty scaling?
 
@@ -230,11 +234,11 @@ func _physics_process(delta: float) -> void:
 
 				var intersection_tween = get_tree().create_tween()
 
-				# from 0 alpha to 1 over 0.1 seconds
+				# from 0 alpha to 1 over 0.5 seconds
 				intersection_tween.tween_property((intersection_polygon.material as BaseMaterial3D), "albedo_color:a", 1, 0.5).from(0) \
 				.set_trans(Tween.TransitionType.TRANS_SINE).set_ease(Tween.EASE_OUT)
 
-				 # from 1 alpha to 0 over 1 seconds
+				# from 1 alpha to 0 over 1 seconds
 				intersection_tween.tween_property((intersection_polygon.material as BaseMaterial3D), "albedo_color:a", 0, 1).from_current() \
 				 	.set_trans(Tween.TransitionType.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
 

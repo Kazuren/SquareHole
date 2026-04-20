@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="PackedEnemy" format=3 uid="uid://c4fc1lhgghdri"]
+
+[ext_resource type="Script" uid="uid://dvkje5eqk6kqh" path="res://PackedEnemy.gd" id="1_qq4gm"]
+[ext_resource type="PackedScene" uid="uid://du86rn618ns15" path="res://Shapes/Tetris/Tetris.tscn" id="1_tg408"]
+
+[resource]
+script = ExtResource("1_qq4gm")
+scene = ExtResource("1_tg408")
+metadata/_custom_type_script = "uid://dvkje5eqk6kqh"
