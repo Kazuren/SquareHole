@@ -46,13 +46,9 @@ var SANITY_MULTIPLIER: float = 0.05 # in percent
 @export_range(0.0, 5.0, 0.1) var magnet_radius: float = 0.2
 @export_range(0.0, 10.0, 0.1) var magnet_strength: float = 3.0
 @export var rotation_step: float = 90.0
-# weight per rotation bucket: index i → rotation of i * rotation_step degrees
-@export var enemy_rotation_weights: Array[int] = [100, 0, 0, 0]
 
 var enemies: Array[ShapeEntity] = []
 var enemy_previews: Dictionary = {} # ShapeEntity -> CSGPolygon3D
-var enemy_bag: Bag
-var enemy_rotation_bag: Bag
 var SPAWN_HEIGHT: float = 15.0
 
 var rng = RandomNumberGenerator.new()
@@ -99,18 +95,11 @@ func _ready() -> void:
 	render_sanity()
 
 	rng.seed = 42
-	enemy_bag = Bag.new(rng)
-	for enemy_pack in enemy_scenes:
-		enemy_bag.add(enemy_pack, enemy_pack.weight)
 
-	print(enemy_bag.probabilities())
+	print_enemy_spawn_probabilities()
+	print_enemy_rotation_probabilities()
 
 	GameStats.rotation_step = rotation_step
-
-	enemy_rotation_bag = Bag.new(rng)
-	for i in range(enemy_rotation_weights.size()):
-		if enemy_rotation_weights[i] > 0:
-			enemy_rotation_bag.add(i * rotation_step, enemy_rotation_weights[i])
 
 	starting_time_ticks = Time.get_ticks_msec()
 
@@ -129,16 +118,15 @@ func _on_timer_timeout() -> void:
 
 
 func spawn_enemy() -> void:
-	var draw = enemy_bag.draw()
-	if draw is not PackedEnemy:
-		push_error("USE PACKEDSCENE")
-	
+	var enemy_packed: PackedEnemy = pick_enemy()
+	if enemy_packed == null:
+		return
+
 	var spawn_point: Vector2 = get_spawn_point()
-	var enemy_packed: PackedEnemy = draw as PackedEnemy
-	
+
 	var node: ShapeEntity = enemy_packed.scene.instantiate()
 	node.shape_scale = enemy_shape_scale
-	node.shape_rotation_degrees = pick_enemy_rotation()
+	node.shape_rotation_degrees = pick_enemy_rotation(enemy_packed)
 
 	add_child(node)
 	enemies.append(node)
@@ -303,6 +291,127 @@ func get_spawn_point() -> Vector2:
 	return offset
 
 
-func pick_enemy_rotation() -> float:
-	var draw = enemy_rotation_bag.draw()
-	return draw if draw != null else 0.0
+func print_enemy_spawn_probabilities() -> void:
+	if enemy_scenes.is_empty():
+		return
+
+	print("Enemy spawn probabilities by minute:")
+	var header := "  min  "
+	for pack in enemy_scenes:
+		var enemy_name := "?"
+		if pack and pack.scene:
+			enemy_name = pack.scene.resource_path.get_file().get_basename()
+		header += "| %10s " % enemy_name
+	print(header)
+
+	var total_minutes := int(GAME_DURATION / 60.0)
+	for minute in range(total_minutes + 1):
+		var progress: float = clamp((minute * 60.0) / GAME_DURATION, 0.0, 1.0)
+
+		var weights: Array[float] = []
+		var total: float = 0.0
+		for pack in enemy_scenes:
+			var w: float = 0.0
+			if pack and pack.weight_curve:
+				w = maxf(pack.weight_curve.sample(progress), 0.0)
+			weights.append(w)
+			total += w
+
+		var row := "  %3d  " % minute
+		for w in weights:
+			var pct: float = (w / total * 100.0) if total > 0.0 else 0.0
+			row += "| %9.1f%% " % pct
+		print(row)
+
+
+func print_enemy_rotation_probabilities() -> void:
+	if enemy_scenes.is_empty():
+		return
+
+	var total_minutes := int(GAME_DURATION / 60.0)
+	for pack in enemy_scenes:
+		if not pack:
+			continue
+		var name := "?"
+		if pack.scene:
+			name = pack.scene.resource_path.get_file().get_basename()
+
+		if pack.rotation_weight_curves.is_empty():
+			print("Rotation probabilities for ", name, ": none (always 0°)")
+			continue
+
+		print("Rotation probabilities for ", name, " by minute:")
+		var header := "  min  "
+		for i in pack.rotation_weight_curves.size():
+			header += "| %6s° " % str(int(i * rotation_step))
+		print(header)
+
+		for minute in range(total_minutes + 1):
+			var progress: float = clamp((minute * 60.0) / GAME_DURATION, 0.0, 1.0)
+
+			var weights: Array[float] = []
+			var total: float = 0.0
+			for curve: Curve in pack.rotation_weight_curves:
+				var w: float = 0.0
+				if curve:
+					w = maxf(curve.sample(progress), 0.0)
+				weights.append(w)
+				total += w
+
+			var row := "  %3d  " % minute
+			for w in weights:
+				var pct: float = (w / total * 100.0) if total > 0.0 else 0.0
+				row += "| %6.1f%% " % pct
+			print(row)
+
+
+func pick_enemy() -> PackedEnemy:
+	if enemy_scenes.is_empty():
+		return null
+
+	var progress := get_game_progress()
+	var weights: Array[float] = []
+	var total: float = 0.0
+	for pack in enemy_scenes:
+		var w: float = 0.0
+		if pack and pack.weight_curve:
+			w = maxf(pack.weight_curve.sample(progress), 0.0)
+		weights.append(w)
+		total += w
+
+	if total <= 0.0:
+		return null
+
+	var roll := rng.randf() * total
+	var acc: float = 0.0
+	for i in weights.size():
+		acc += weights[i]
+		if roll < acc:
+			return enemy_scenes[i]
+	return enemy_scenes[enemy_scenes.size() - 1]
+
+
+func pick_enemy_rotation(pack: PackedEnemy) -> float:
+	if pack.rotation_weight_curves.is_empty():
+		return 0.0
+
+	var progress := get_game_progress()
+	var weights: Array[float] = []
+	var total: float = 0.0
+	for curve: Curve in pack.rotation_weight_curves:
+		var w: float = 0.0
+		if curve:
+			w = maxf(curve.sample(progress), 0.0)
+		weights.append(w)
+		total += w
+
+	if total <= 0.0:
+		return 0.0
+
+	var roll := rng.randf() * total
+	var acc: float = 0.0
+	for i in weights.size():
+		acc += weights[i]
+		if roll < acc:
+			return i * rotation_step
+	return 0.0
