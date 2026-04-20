@@ -54,6 +54,9 @@ const SANE_TEXTURE = preload("res://Art/GirlExpressions/squareHoleGirlSane.png")
 const SEMISANE_TEXTURE = preload("res://Art/GirlExpressions/squareHoleGirlSemiSane.png")
 const INSANE_TEXTURE = preload("res://Art/GirlExpressions/squareHoleGirlInsane.png")
 
+const HIT_SFX = preload("res://Sound/Sfx/successSfx.wav")
+const MISS_SFX = preload("res://Sound/Sfx/failureSfx.wav")
+
 func render_girl_sanity_expression(sanityValue: float) -> void:
 	if sanityValue <= 100 and sanityValue >= 67:
 		%GirlSanityExpression.texture = SANE_TEXTURE
@@ -189,7 +192,6 @@ func _on_endless_mode_pressed() -> void:
 	get_tree().paused = false
 	end_screens.hide_all()
 
-
 func _physics_process(delta: float) -> void:
 	elapsed_physics_frames += 1
 
@@ -255,6 +257,16 @@ func _physics_process(delta: float) -> void:
 			label_tween.parallel().tween_property(hit_label, "global_position:y", -0.5, 0.50).as_relative().set_trans(Tween.TransitionType.TRANS_SINE).set_ease(Tween.EaseType.EASE_IN_OUT).set_delay(0.75)
 			
 			label_tween.tween_callback(hit_label.queue_free)
+			
+	
+			if score_base >= 0.5:
+				$AudioPlayer.stream = HIT_SFX
+				$AudioPlayer.pitch_scale = score_base
+			else:
+				$AudioPlayer.stream = MISS_SFX
+				$AudioPlayer.pitch_scale = score_base
+
+			$AudioPlayer.play()
 
 			# SHAPES
 			var intersection_shape: Variant = player.get_intersection_shape(e) # PackedVector2Array | NULL

@@ -1,4 +1,4 @@
-[gd_scene format=3 uid="uid://3d31nk2ftblc"]
+[gd_scene load_steps=24 format=3 uid="uid://3d31nk2ftblc"]
 
 [ext_resource type="Script" uid="uid://ukfdxoqcv7xy" path="res://main.gd" id="1_glv2v"]
 [ext_resource type="Material" uid="uid://deno8q70reo7q" path="res://ShapeMaterials/XorMaterial.tres" id="3_fos0i"]
@@ -56,7 +56,7 @@ colors = PackedColorArray(1, 0.47429025, 0.4444329, 1)
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_wkp8b"]
 gradient = SubResource("Gradient_03owx")
 
-[node name="Main" type="Node3D" unique_id=355268627]
+[node name="Main" type="Node3D"]
 script = ExtResource("1_glv2v")
 intersection_material = ExtResource("4_cm0pq")
 xor_material = ExtResource("3_fos0i")
@@ -66,11 +66,14 @@ score_color_gradient = SubResource("Gradient_20pc6")
 enemy_scenes = Array[ExtResource("4_3dxm6")]([ExtResource("7_wkp8b"), ExtResource("7_03owx"), ExtResource("9_20pc6")])
 game_duration = 600.0
 sanity_penalty_curve = SubResource("Curve_03owx")
+enemy_shape_scale = null
+magnet_radius = null
+magnet_strength = null
 
-[node name="Pivot" type="Node3D" parent="." unique_id=47895836]
+[node name="Pivot" type="Node3D" parent="."]
 transform = Transform3D(0.7071067, -0.3535534, 0.61237234, 0, 0.8660254, 0.5, -0.7071067, -0.3535534, 0.61237234, 0, 0, 0)
 
-[node name="Camera3D" type="Camera3D" parent="Pivot" unique_id=343791336]
+[node name="Camera3D" type="Camera3D" parent="Pivot"]
 transform = Transform3D(0.99999994, 0, 0, 0, 0.99999994, 0, 0, 0, 0.99999994, 0, 0, 14)
 projection = 1
 current = true
@@ -79,40 +82,40 @@ size = 9.0
 near = 0.02
 far = 100.0
 
-[node name="Ground" type="CSGBox3D" parent="." unique_id=2124307291]
+[node name="Ground" type="CSGBox3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
 size = Vector3(40, 1, 40)
 material = SubResource("StandardMaterial3D_uu6xs")
 metadata/_edit_lock_ = true
 metadata/_edit_group_ = true
 
-[node name="Player" parent="." unique_id=122447458 instance=ExtResource("3_r0du0")]
+[node name="Player" parent="." instance=ExtResource("3_r0du0")]
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.1, 0, 0)
 material_override = SubResource("StandardMaterial3D_r0du0")
 metadata/_edit_lock_ = true
 
-[node name="SunPivot" type="Node3D" parent="." unique_id=771010700]
+[node name="SunPivot" type="Node3D" parent="."]
 transform = Transform3D(0.89249134, 0, -0.45106447, 0, 1, 0, 0.45106447, 0, 0.89249134, 0, 0, 0)
 
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="SunPivot" unique_id=1990455208]
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="SunPivot"]
 transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 500, 0)
 shadow_enabled = true
 
-[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1393438895]
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_r0du0")
 
-[node name="SpawnerMesh" type="MeshInstance3D" parent="." unique_id=1297717980]
+[node name="SpawnerMesh" type="MeshInstance3D" parent="."]
 unique_name_in_owner = true
 mesh = SubResource("CylinderMesh_fos0i")
 metadata/_edit_lock_ = true
 
-[node name="SpawnTimer" type="Timer" parent="." unique_id=1660271660]
+[node name="SpawnTimer" type="Timer" parent="."]
 unique_name_in_owner = true
 wait_time = 3.0
 autostart = true
 
-[node name="UI" type="MarginContainer" parent="." unique_id=1546931697]
+[node name="UI" type="MarginContainer" parent="."]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -122,11 +125,11 @@ theme_override_constants/margin_top = 32
 theme_override_constants/margin_right = 32
 metadata/_edit_lock_ = true
 
-[node name="Control2" type="Control" parent="UI" unique_id=2008195992]
+[node name="Control2" type="Control" parent="UI"]
 layout_mode = 2
 metadata/_edit_lock_ = true
 
-[node name="SurvivalTimeLabel" type="Label" parent="UI/Control2" unique_id=1092673610]
+[node name="SurvivalTimeLabel" type="Label" parent="UI/Control2"]
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 5
@@ -140,13 +143,13 @@ text = "00:00"
 label_settings = SubResource("LabelSettings_fos0i")
 horizontal_alignment = 1
 
-[node name="SurvivalTimer" type="Timer" parent="UI/Control2" unique_id=343280521]
+[node name="SurvivalTimer" type="Timer" parent="UI/Control2"]
 
-[node name="Control" type="Control" parent="UI" unique_id=1165035144]
+[node name="Control" type="Control" parent="UI"]
 layout_mode = 2
 metadata/_edit_lock_ = true
 
-[node name="MarginContainer" type="MarginContainer" parent="UI/Control" unique_id=2134428426]
+[node name="MarginContainer" type="MarginContainer" parent="UI/Control"]
 custom_minimum_size = Vector2(48, 256)
 layout_mode = 1
 anchors_preset = 1
@@ -157,7 +160,7 @@ offset_bottom = 45.0
 grow_horizontal = 0
 size_flags_horizontal = 8
 
-[node name="SanityBar" type="TextureProgressBar" parent="UI/Control/MarginContainer" unique_id=94655288]
+[node name="SanityBar" type="TextureProgressBar" parent="UI/Control/MarginContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 value = 50.0
@@ -166,7 +169,7 @@ nine_patch_stretch = true
 texture_under = SubResource("GradientTexture2D_20pc6")
 texture_progress = SubResource("GradientTexture2D_wkp8b")
 
-[node name="SanityLabel" type="Label" parent="UI/Control/MarginContainer/SanityBar" unique_id=459712615]
+[node name="SanityLabel" type="Label" parent="UI/Control/MarginContainer/SanityBar"]
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 8
@@ -183,18 +186,18 @@ grow_vertical = 2
 text = "50%"
 horizontal_alignment = 1
 
-[node name="MarginContainer" type="MarginContainer" parent="UI" unique_id=1352814785]
+[node name="MarginContainer" type="MarginContainer" parent="UI"]
 custom_minimum_size = Vector2(0, 180)
 layout_mode = 2
 size_flags_vertical = 8
 metadata/_edit_lock_ = true
 
-[node name="ShapeCarousel" parent="UI/MarginContainer" unique_id=1646561163 instance=ExtResource("11_20pc6")]
+[node name="ShapeCarousel" parent="UI/MarginContainer" instance=ExtResource("11_20pc6")]
 layout_mode = 2
 player_path = NodePath("../../../Player")
 metadata/_edit_lock_ = true
 
-[node name="GirlSanityExpression" type="TextureRect" parent="." unique_id=1946468393]
+[node name="GirlSanityExpression" type="TextureRect" parent="."]
 unique_name_in_owner = true
 offset_left = 1800.0
 offset_top = 294.0
@@ -202,11 +205,11 @@ offset_right = 1923.0
 offset_bottom = 421.0
 expand_mode = 1
 
-[node name="EndScreens" type="CanvasLayer" parent="." unique_id=1407388669]
+[node name="EndScreens" type="CanvasLayer" parent="."]
 process_mode = 3
 script = ExtResource("12_endsc")
 
-[node name="GameOverScreen" type="Control" parent="EndScreens" unique_id=510567451]
+[node name="GameOverScreen" type="Control" parent="EndScreens"]
 visible = false
 layout_mode = 3
 anchors_preset = 15
@@ -215,7 +218,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="ColorRect" type="ColorRect" parent="EndScreens/GameOverScreen" unique_id=103081680]
+[node name="ColorRect" type="ColorRect" parent="EndScreens/GameOverScreen"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -225,7 +228,7 @@ grow_vertical = 2
 mouse_filter = 2
 color = Color(0, 0, 0, 0.6)
 
-[node name="VBoxContainer" type="VBoxContainer" parent="EndScreens/GameOverScreen" unique_id=1475901763]
+[node name="VBoxContainer" type="VBoxContainer" parent="EndScreens/GameOverScreen"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -240,17 +243,17 @@ grow_horizontal = 2
 grow_vertical = 2
 alignment = 1
 
-[node name="Label" type="Label" parent="EndScreens/GameOverScreen/VBoxContainer" unique_id=1801004050]
+[node name="Label" type="Label" parent="EndScreens/GameOverScreen/VBoxContainer"]
 layout_mode = 2
 text = "Game Over"
 label_settings = SubResource("LabelSettings_fos0i")
 horizontal_alignment = 1
 
-[node name="RetryButton" type="Button" parent="EndScreens/GameOverScreen/VBoxContainer" unique_id=722582528]
+[node name="RetryButton" type="Button" parent="EndScreens/GameOverScreen/VBoxContainer"]
 layout_mode = 2
 text = "Retry"
 
-[node name="VictoryScreen" type="Control" parent="EndScreens" unique_id=258183622]
+[node name="VictoryScreen" type="Control" parent="EndScreens"]
 visible = false
 layout_mode = 3
 anchors_preset = 15
@@ -259,7 +262,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="ColorRect" type="ColorRect" parent="EndScreens/VictoryScreen" unique_id=1014357369]
+[node name="ColorRect" type="ColorRect" parent="EndScreens/VictoryScreen"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -269,7 +272,7 @@ grow_vertical = 2
 mouse_filter = 2
 color = Color(0, 0, 0, 0.6)
 
-[node name="VBoxContainer" type="VBoxContainer" parent="EndScreens/VictoryScreen" unique_id=651343436]
+[node name="VBoxContainer" type="VBoxContainer" parent="EndScreens/VictoryScreen"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -284,12 +287,15 @@ grow_horizontal = 2
 grow_vertical = 2
 alignment = 1
 
-[node name="Label" type="Label" parent="EndScreens/VictoryScreen/VBoxContainer" unique_id=1856487810]
+[node name="Label" type="Label" parent="EndScreens/VictoryScreen/VBoxContainer"]
 layout_mode = 2
 text = "Victory!"
 label_settings = SubResource("LabelSettings_fos0i")
 horizontal_alignment = 1
 
-[node name="EndlessModeButton" type="Button" parent="EndScreens/VictoryScreen/VBoxContainer" unique_id=1522812082]
+[node name="EndlessModeButton" type="Button" parent="EndScreens/VictoryScreen/VBoxContainer"]
 layout_mode = 2
 text = "Endless Mode"
+
+[node name="AudioPlayer" type="AudioStreamPlayer3D" parent="."]
+unique_name_in_owner = true
