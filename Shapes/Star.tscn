@@ -4,7 +4,7 @@
 
 [sub_resource type="ConvexPolygonShape2D" id="ConvexPolygonShape2D_ayhff"]
 resource_local_to_scene = true
-points = PackedVector2Array(-48, 0, -16, 16, 0, 48, 16, 16, 50, 0, 16, -16, 0, -48, -16, -16)
+points = PackedVector2Array(-48, 0, -16, 16, 0, 48, 16, 16, 48, 0, 16, -16, 0, -48, -16, -16)
 
 [node name="Star" unique_id=56703870 instance=ExtResource("1_ayhff")]
 

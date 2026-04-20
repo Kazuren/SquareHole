@@ -25,6 +25,9 @@ func _process(delta: float) -> void:
 	elif Input.is_action_just_pressed("switch_right"):
 		switch_shape(1)
 
+	if Input.is_action_just_pressed("rotate"):
+		rotate_shape()
+
 	var input_vector: Vector2 = Input.get_vector("move_left", "move_right", "move_down", "move_up")
 
 	if input_vector.is_zero_approx():
@@ -53,8 +56,13 @@ func switch_shape(direction: int) -> void:
 	apply_shape(posmod(current_shape_index + direction, n))
 
 
+func rotate_shape() -> void:
+	shape_rotation_degrees = fposmod(shape_rotation_degrees + GameStats.rotation_step, 360.0)
+
+
 func apply_shape(idx: int) -> void:
 	current_shape_index = idx
+	shape_rotation_degrees = 0.0 # reset rotation when switching shapes
 	var shape := shapes[idx]
 	(collisionShape2D.shape as ConvexPolygonShape2D).points = shape.points
 	# Collision points are in 100-unit space, scale down to world scale

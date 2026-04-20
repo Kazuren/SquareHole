@@ -17,11 +17,11 @@ extends Node3D
 # game over/win screen(after 20 minutes?)
 # main menu
 
-# player switching shape
 # rotate player + spawn rotated enemy shapes
 
 # distortion as player loses sanity?
 # protagonist texture near sanity bar, change texture on sanity change
+# export prefixed sanity levels with an associated texture
 
 # maybe switch from curved to linear score formula as game progresses to aid in difficulty scaling?
 
@@ -45,10 +45,14 @@ var SANITY_MULTIPLIER: float = 0.05 # in percent
 @export_range(0.1, 1.0, 0.05) var enemy_shape_scale: float = 1.0
 @export_range(0.0, 5.0, 0.1) var magnet_radius: float = 0.2
 @export_range(0.0, 10.0, 0.1) var magnet_strength: float = 3.0
+@export var rotation_step: float = 90.0
+# weight per rotation bucket: index i → rotation of i * rotation_step degrees
+@export var enemy_rotation_weights: Array[int] = [100, 0, 0, 0]
 
 var enemies: Array[ShapeEntity] = []
 var enemy_previews: Dictionary = {} # ShapeEntity -> CSGPolygon3D
 var enemy_bag: Bag
+var enemy_rotation_bag: Bag
 var SPAWN_HEIGHT: float = 15.0
 
 var rng = RandomNumberGenerator.new()
@@ -101,6 +105,13 @@ func _ready() -> void:
 
 	print(enemy_bag.probabilities())
 
+	GameStats.rotation_step = rotation_step
+
+	enemy_rotation_bag = Bag.new(rng)
+	for i in range(enemy_rotation_weights.size()):
+		if enemy_rotation_weights[i] > 0:
+			enemy_rotation_bag.add(i * rotation_step, enemy_rotation_weights[i])
+
 	starting_time_ticks = Time.get_ticks_msec()
 
 	Engine.time_scale = 1
@@ -127,6 +138,7 @@ func spawn_enemy() -> void:
 	
 	var node: ShapeEntity = enemy_packed.scene.instantiate()
 	node.shape_scale = enemy_shape_scale
+	node.shape_rotation_degrees = pick_enemy_rotation()
 
 	add_child(node)
 	enemies.append(node)
@@ -284,8 +296,13 @@ func spawn_xor_visual(shapes: Array[PackedVector2Array]) -> void:
 
 
 func get_spawn_point() -> Vector2:
-	
+
 	var r: float = ($SpawnerMesh.mesh as CylinderMesh).top_radius * sqrt(rng.randf())
 	var theta: float = rng.randf() * TAU
 	var offset := Vector2(cos(theta) * r, sin(theta) * r)
 	return offset
+
+
+func pick_enemy_rotation() -> float:
+	var draw = enemy_rotation_bag.draw()
+	return draw if draw != null else 0.0

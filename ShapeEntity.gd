@@ -10,6 +10,11 @@ var shape_scale: float = 1.0:
 		shape_scale = value
 		self.scale = Vector3.ONE * shape_scale
 
+var shape_rotation_degrees: float = 0.0:
+	set(value):
+		shape_rotation_degrees = value
+		self.rotation.y = deg_to_rad(-value) # negative so positive input = CW from top-down view
+
 @onready var collisionShape2D: CollisionShape2D = $%CollisionShape2D
 
 
@@ -56,6 +61,7 @@ func get_translated_vectorarray() -> PackedVector2Array:
 	var projected_pos_scaled = Vector2(self.position.x, self.position.z) * baseline_scale
 	return self.get_points_2d() \
 		* Transform2D(0, Vector2.ONE * shape_scale, 0, Vector2.ZERO) \
+		* Transform2D(deg_to_rad(-shape_rotation_degrees), Vector2.ONE, 0, Vector2.ZERO) \
 		* Transform2D(0, Vector2.ONE, 0, -projected_pos_scaled) \
 		* Transform2D(0, Vector2.ONE / baseline_scale, 0, Vector2.ZERO)
 

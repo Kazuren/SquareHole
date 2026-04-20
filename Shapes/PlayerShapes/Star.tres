@@ -4,5 +4,5 @@
 
 [resource]
 script = ExtResource("1_packedshape")
-points = PackedVector2Array(-48, 0, -16, 16, 0, 48, 16, 16, 50, 0, 16, -16, 0, -48, -16, -16)
+points = PackedVector2Array(-48, 0, -16, 16, 0, 48, 16, 16, 48, 0, 16, -16, 0, -48, -16, -16)
 display_name = "Star"
