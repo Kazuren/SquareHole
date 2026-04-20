@@ -78,6 +78,10 @@ var _sanity_bar_tween: Tween
 @export var vignette_pulse_duration: float = 0.18
 var _vignette_pulse_tween: Tween
 
+@export var hit_label_pop_duration: float = 0.2
+@export var hit_label_pop_end_scale: float = 1.0 # normal hits settle at this scale
+@export var hit_label_pop_perfect_scale: float = 1.3 # hits >= hitstop_threshold settle bigger
+
 var enemies: Array[ShapeEntity] = []
 var enemy_previews: Dictionary = {} # ShapeEntity -> CSGPolygon3D
 var SPAWN_HEIGHT: float = 15.0
@@ -417,12 +421,12 @@ func _physics_process(delta: float) -> void:
 				hit_label.modulate = lerp(Color.TOMATO, Color.SPRING_GREEN, score_base)
 			hit_label.rotate(Vector3.UP, PI * 0.25)
 			hit_label.rotate(Vector3.FORWARD, rng.randf_range(PI * -0.125, PI * 0.125))
-			
-			#hit_label.look_at($Pivot/Camera3D.global_position, Vector3.UP, true)
-			#hit_label.rotation_degrees.x = 0aasas
-			#hit_label.rotation_degrees.z = 0
+
+			var label_end_scale: float = hit_label_pop_perfect_scale if score_base >= hitstop_threshold else hit_label_pop_end_scale
+			hit_label.scale = Vector3.ONE * label_end_scale * 0.5
 
 			var label_tween = get_tree().create_tween()
+			label_tween.parallel().tween_property(hit_label, "scale", Vector3.ONE * label_end_scale, hit_label_pop_duration).from_current().set_trans(Tween.TransitionType.TRANS_BACK).set_ease(Tween.EaseType.EASE_OUT)
 			label_tween.parallel().tween_property(hit_label, "modulate:a", 0, 1.25).from_current().set_trans(Tween.TransitionType.TRANS_EXPO).set_ease(Tween.EaseType.EASE_IN)
 			label_tween.parallel().tween_property(hit_label, "rotation_degrees:z", rng.randf_range(-25, 25), 1).from_current().set_trans(Tween.TransitionType.TRANS_CUBIC).set_ease(Tween.EaseType.EASE_OUT)
 			
