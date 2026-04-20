@@ -10,6 +10,7 @@ signal shape_changed(idx: int)
 
 var is_moving: bool = false
 var current_shape_index: int = 0
+var current_rotation_index: int = 0
 
 @onready var visual: CSGPolygon3D = $Visual
 
@@ -57,13 +58,18 @@ func switch_shape(direction: int) -> void:
 
 
 func rotate_shape() -> void:
-	shape_rotation_degrees = fposmod(shape_rotation_degrees + GameStats.rotation_step, 360.0)
+	var shape := shapes[current_shape_index]
+	if shape.rotation_angles.is_empty():
+		return
+	current_rotation_index = (current_rotation_index + 1) % shape.rotation_angles.size()
+	shape_rotation_degrees = shape.rotation_angles[current_rotation_index]
 
 
 func apply_shape(idx: int) -> void:
 	current_shape_index = idx
-	shape_rotation_degrees = 0.0 # reset rotation when switching shapes
+	current_rotation_index = 0
 	var shape := shapes[idx]
+	shape_rotation_degrees = shape.rotation_angles[0] if not shape.rotation_angles.is_empty() else 0.0
 	(collisionShape2D.shape as ConvexPolygonShape2D).points = shape.points
 	# Collision points are in 100-unit space, scale down to world scale
 	var visual_points := PackedVector2Array()

@@ -64,7 +64,6 @@ hit_label_scene = ExtResource("8_trn2v")
 score_color_gradient = SubResource("Gradient_20pc6")
 enemy_scenes = Array[ExtResource("4_3dxm6")]([ExtResource("7_wkp8b"), ExtResource("7_03owx"), ExtResource("9_20pc6")])
 sanity_penalty_curve = SubResource("Curve_03owx")
-rotation_step = 45.0
 
 [node name="Pivot" type="Node3D" parent="." unique_id=556041694]
 transform = Transform3D(0.7071067, -0.3535534, 0.61237234, 0, 0.8660254, 0.5, -0.7071067, -0.3535534, 0.61237234, 0, 0, 0)

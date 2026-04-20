@@ -11,21 +11,14 @@ point_count = 2
 _data = [Vector2(0.048387095, 0), 0.0, 0.0, 0, 0, Vector2(1, 0.5), 0.0, 0.0, 0, 0]
 point_count = 2
 
-[sub_resource type="Curve" id="Curve_45f0l"]
-_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.5), 0.0, 0.0, 0, 0]
-point_count = 2
-
-[sub_resource type="Curve" id="Curve_cseq4"]
-_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.5), 0.0, 0.0, 0, 0]
-point_count = 2
-
 [sub_resource type="Curve" id="Curve_1m6dx"]
-_data = [Vector2(1e-05, 0), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
 point_count = 2
 
 [resource]
 script = ExtResource("2_mqfij")
 weight_curve = SubResource("Curve_1m6dx")
 scene = ExtResource("1_cf3s4")
-rotation_weight_curves = Array[Curve]([SubResource("Curve_ap3gu"), SubResource("Curve_xylws"), SubResource("Curve_ap3gu"), SubResource("Curve_xylws"), SubResource("Curve_45f0l"), SubResource("Curve_xylws"), SubResource("Curve_cseq4"), SubResource("Curve_xylws")])
+rotation_angles = Array[float]([0.0, 45.0])
+rotation_weight_curves = Array[Curve]([SubResource("Curve_ap3gu"), SubResource("Curve_xylws")])
 metadata/_custom_type_script = "uid://dvkje5eqk6kqh"

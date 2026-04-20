@@ -47,7 +47,6 @@ var SANITY_MULTIPLIER: float = 0.05 # in percent
 @export_range(0.1, 1.0, 0.05) var enemy_shape_scale: float = 1.0
 @export_range(0.0, 5.0, 0.1) var magnet_radius: float = 0.2
 @export_range(0.0, 10.0, 0.1) var magnet_strength: float = 3.0
-@export var rotation_step: float = 90.0
 
 var enemies: Array[ShapeEntity] = []
 var enemy_previews: Dictionary = {} # ShapeEntity -> CSGPolygon3D
@@ -100,8 +99,6 @@ func _ready() -> void:
 
 	print_enemy_spawn_probabilities()
 	print_enemy_rotation_probabilities()
-
-	GameStats.rotation_step = rotation_step
 
 	starting_time_ticks = Time.get_ticks_msec()
 
@@ -195,7 +192,7 @@ func _physics_process(delta: float) -> void:
 			var hit_label: Label3D = hit_label_scene.instantiate()
 			add_child(hit_label)
 			hit_label.global_position = player.global_position
-			hit_label.text = ("%d%%" + ("!" if score_base >= 0.5 else "?!")) % (score_base * 100)
+			hit_label.text = ("%d%%" + ("!" if score_base >= 0.5 else "?!")) % int(round(score_base * 100))
 			if score_color_gradient:
 				hit_label.modulate = score_color_gradient.sample(score_base)
 			else:
@@ -371,7 +368,7 @@ func print_enemy_rotation_probabilities() -> void:
 		print("Rotation probabilities for ", enemy_name, " by minute:")
 		var header := "  min  "
 		for i in pack.rotation_weight_curves.size():
-			header += "| %6s° " % str(int(i * rotation_step))
+			header += "| %6s° " % str(int(pack.rotation_angles[i]))
 		print(header)
 
 		for minute in range(total_minutes + 1):
@@ -441,5 +438,5 @@ func pick_enemy_rotation(pack: PackedEnemy) -> float:
 	for i in weights.size():
 		acc += weights[i]
 		if roll < acc:
-			return i * rotation_step
+			return pack.rotation_angles[i]
 	return 0.0
