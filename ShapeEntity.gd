@@ -67,23 +67,34 @@ func get_intersection_area(other_entity: ShapeEntity) -> float:
 	return get_area_2d_of(intersection_shape)
 
 
-func get_xor_shape(other_entity: ShapeEntity) -> Variant: # PackedVector2Array | NULL
-	var my_shape_translated_points = self.get_translated_vectorarray()
-	var other_shape_translated_points = other_entity.get_translated_vectorarray()
-	
-	var xor_shapes: Array[PackedVector2Array] = Geometry2D.clip_polygons(other_shape_translated_points, my_shape_translated_points)
-	if xor_shapes.size() > 0:
-		return xor_shapes[0]
-	else:
-		return null
+func get_enemy_uncovered_shapes(other_entity: ShapeEntity) -> Array[PackedVector2Array]:
+	# parts of the enemy (other) NOT covered by the player (self)
+	var my_points = self.get_translated_vectorarray()
+	var other_points = other_entity.get_translated_vectorarray()
+	return Geometry2D.clip_polygons(other_points, my_points)
+
+
+func get_player_excess_shapes(other_entity: ShapeEntity) -> Array[PackedVector2Array]:
+	# parts of the player (self) that extend beyond the enemy (other)
+	# only returned when there's an actual overlap, no "floating" red on full misses
+	if get_intersection_shape(other_entity) == null:
+		return []
+	var my_points = self.get_translated_vectorarray()
+	var other_points = other_entity.get_translated_vectorarray()
+	return Geometry2D.clip_polygons(my_points, other_points)
 
 
 func get_xor_area(other_entity: ShapeEntity) -> float:
-	var xor_shape = get_xor_shape(other_entity)
-	if xor_shape == null:
-		return 0
-	
-	return get_area_2d_of(xor_shape)
+	# for scoring: still sums the full symmetric difference
+	# (enemy uncovered + player excess) regardless of overlap,
+	# so a total miss scores 0% via intersection/(intersection+xor)
+	var total: float = 0.0
+	for shape in Geometry2D.exclude_polygons(
+		other_entity.get_translated_vectorarray(),
+		self.get_translated_vectorarray()
+	):
+		total += get_area_2d_of(shape)
+	return total
 
 
 enum ScoreFormula { LINEAR, CURVED }
