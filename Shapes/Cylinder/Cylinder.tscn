@@ -3,12 +3,16 @@
 [ext_resource type="PackedScene" uid="uid://c2fglmehf860l" path="res://Enemy.tscn" id="1_65ist"]
 [ext_resource type="ArrayMesh" uid="uid://dkjlmwkemexhb" path="res://Shapes/Cylinder/Cylinder.res" id="2_h747e"]
 
-[sub_resource type="ConvexPolygonShape2D" id="ConvexPolygonShape2D_h747e"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_h747e"]
+albedo_color = Color(0.49803922, 1, 0.83137256, 1)
+
+[sub_resource type="ConvexPolygonShape2D" id="ConvexPolygonShape2D_cnmtv"]
 resource_local_to_scene = true
 points = PackedVector2Array(0, 0.5, 0.098, 0.49, 0.191, 0.462, 0.278, 0.416, 0.354, 0.354, 0.416, 0.278, 0.462, 0.191, 0.49, 0.098, 0.5, 0, 0.49, -0.098, 0.462, -0.191, 0.416, -0.278, 0.354, -0.354, 0.278, -0.416, 0.191, -0.462, 0.098, -0.49, 0, -0.5, -0.098, -0.49, -0.191, -0.462, -0.278, -0.416, -0.354, -0.354, -0.416, -0.278, -0.462, -0.191, -0.49, -0.098, -0.5, 0, -0.49, 0.098, -0.462, 0.191, -0.416, 0.278, -0.354, 0.354, -0.278, 0.416, -0.191, 0.462, -0.098, 0.49)
 
 [node name="Cylinder" unique_id=56703870 instance=ExtResource("1_65ist")]
+material_override = SubResource("StandardMaterial3D_h747e")
 mesh = ExtResource("2_h747e")
 
 [node name="CollisionShape2D" parent="." index="0" unique_id=976849342]
-shape = SubResource("ConvexPolygonShape2D_h747e")
+shape = SubResource("ConvexPolygonShape2D_cnmtv")

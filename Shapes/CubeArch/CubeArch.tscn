@@ -3,12 +3,16 @@
 [ext_resource type="PackedScene" uid="uid://c2fglmehf860l" path="res://Enemy.tscn" id="1_iivre"]
 [ext_resource type="ArrayMesh" uid="uid://c75utosvxg8f2" path="res://Shapes/CubeArch/CubeArch.res" id="2_y2uo3"]
 
-[sub_resource type="ConvexPolygonShape2D" id="ConvexPolygonShape2D_y2uo3"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_y2uo3"]
+albedo_color = Color(0.9372549, 0.87058824, 0.8039216, 1)
+
+[sub_resource type="ConvexPolygonShape2D" id="ConvexPolygonShape2D_4wap7"]
 resource_local_to_scene = true
 points = PackedVector2Array(0.5, 0.5, -0.5, 0.5, -0.5, -0.5, 0.5, -0.5)
 
 [node name="CubeArch" unique_id=56703870 instance=ExtResource("1_iivre")]
+material_override = SubResource("StandardMaterial3D_y2uo3")
 mesh = ExtResource("2_y2uo3")
 
 [node name="CollisionShape2D" parent="." index="0" unique_id=976849342]
-shape = SubResource("ConvexPolygonShape2D_y2uo3")
+shape = SubResource("ConvexPolygonShape2D_4wap7")

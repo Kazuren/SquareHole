@@ -3,15 +3,19 @@
 [ext_resource type="PackedScene" uid="uid://c2fglmehf860l" path="res://Enemy.tscn" id="1_t23dy"]
 [ext_resource type="ArrayMesh" uid="uid://4mahs4v0nbfj" path="res://Shapes/Tetris/Tetris.res" id="2_6dspp"]
 
-[sub_resource type="ConvexPolygonShape2D" id="ConvexPolygonShape2D_6dspp"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_6dspp"]
+albedo_color = Color(0, 0.58431375, 0.7137255, 1)
+
+[sub_resource type="ConvexPolygonShape2D" id="ConvexPolygonShape2D_x5r2h"]
 resource_local_to_scene = true
 points = PackedVector2Array(-0.5, 0.333, -0.167, 0.333, 0.167, 0.333, 0.167, 0, 0.5, 0, 0.5, -0.333, 0.16, -0.333, -0.166, -0.333, -0.167, 0, -0.5, 0)
 
 [node name="Tetris" unique_id=56703870 instance=ExtResource("1_t23dy")]
 transform = Transform3D(1, 0, 0, 0, -1, 8.742278e-08, 0, -8.742278e-08, -1, 0, 0, 0)
+material_override = SubResource("StandardMaterial3D_6dspp")
 mesh = ExtResource("2_6dspp")
 metadata/_edit_lock_ = true
 
 [node name="CollisionShape2D" parent="." index="0" unique_id=976849342]
-shape = SubResource("ConvexPolygonShape2D_6dspp")
+shape = SubResource("ConvexPolygonShape2D_x5r2h")
 metadata/_edit_lock_ = true

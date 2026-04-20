@@ -4,7 +4,7 @@
 [ext_resource type="ArrayMesh" uid="uid://cx677yd1st4i3" path="res://Shapes/Cube/Cube.res" id="2_o734h"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_1dlly"]
-albedo_color = Color(1, 0.7470509, 0.57002854, 1)
+albedo_color = Color(0.85490197, 0.627451, 0.42745098, 1)
 
 [sub_resource type="ConvexPolygonShape2D" id="ConvexPolygonShape2D_o734h"]
 resource_local_to_scene = true
