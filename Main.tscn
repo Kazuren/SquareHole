@@ -18,6 +18,7 @@
 [ext_resource type="Shader" uid="uid://bs8ufwopcg7rk" path="res://signal_distortion.gdshader" id="13_sigdi"]
 [ext_resource type="PackedScene" uid="uid://er6um4de2hsa" path="res://SettingsPopup.tscn" id="14_sp"]
 [ext_resource type="Script" uid="uid://bolma12vvinrl" path="res://in_game_menu.gd" id="15_igm"]
+[ext_resource type="FontFile" uid="uid://7myofhlchhg7" path="res://Fonts/VT323-Regular.ttf" id="17_5tuhn"]
 
 [sub_resource type="Gradient" id="Gradient_20pc6"]
 interpolation_mode = 2
@@ -56,6 +57,7 @@ bottom_radius = 8.0
 height = 0.001
 
 [sub_resource type="LabelSettings" id="LabelSettings_fos0i"]
+font = ExtResource("17_5tuhn")
 font_size = 32
 
 [sub_resource type="Gradient" id="Gradient_wkp8b"]
@@ -71,6 +73,10 @@ colors = PackedColorArray(1, 0.47429025, 0.4444329, 1)
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_wkp8b"]
 gradient = SubResource("Gradient_03owx")
+
+[sub_resource type="LabelSettings" id="LabelSettings_devvj"]
+font = ExtResource("17_5tuhn")
+font_size = 32
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_sigdi"]
 shader = ExtResource("13_sigdi")
@@ -99,6 +105,14 @@ corner_radius_top_right = 8
 corner_radius_bottom_right = 8
 corner_radius_bottom_left = 8
 
+[sub_resource type="LabelSettings" id="LabelSettings_5tuhn"]
+font = ExtResource("17_5tuhn")
+font_size = 32
+
+[sub_resource type="LabelSettings" id="LabelSettings_2gh4u"]
+font = ExtResource("17_5tuhn")
+font_size = 32
+
 [node name="Main" type="Node3D" unique_id=355268627]
 script = ExtResource("1_glv2v")
 intersection_material = ExtResource("4_cm0pq")
@@ -110,6 +124,8 @@ enemy_scenes = Array[ExtResource("4_3dxm6")]([ExtResource("7_wkp8b"), ExtResourc
 game_duration = 600.0
 sanity_threshold = 0.75
 sanity_threshold_curve = SubResource("Curve_sc1dx")
+sanity_gain_streak_step = 0.3
+sanity_gain_streak_max = 1.5
 sanity_penalty_curve = SubResource("Curve_03owx")
 heartbeat_min_bpm = 20.0
 heartbeat_max_bpm = 120.0
@@ -247,6 +263,7 @@ offset_bottom = 11.5
 grow_horizontal = 2
 grow_vertical = 2
 text = "50%"
+label_settings = SubResource("LabelSettings_devvj")
 horizontal_alignment = 1
 
 [node name="MarginContainer" type="MarginContainer" parent="UI" unique_id=1957468538]
@@ -339,12 +356,15 @@ horizontal_alignment = 1
 unique_name_in_owner = true
 layout_mode = 2
 text = "Survived: 00:00"
+label_settings = SubResource("LabelSettings_5tuhn")
 horizontal_alignment = 1
 
 [node name="RetryButton" type="Button" parent="EndScreens/GameOverScreen/PanelContainer/MarginContainer/VBoxContainer" unique_id=967336812]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
+theme_override_fonts/font = ExtResource("17_5tuhn")
+theme_override_font_sizes/font_size = 32
 text = "Retry"
 
 [node name="VictoryScreen" type="Control" parent="EndScreens" unique_id=610636707]
@@ -402,12 +422,15 @@ horizontal_alignment = 1
 unique_name_in_owner = true
 layout_mode = 2
 text = "Survived: 00:00"
+label_settings = SubResource("LabelSettings_2gh4u")
 horizontal_alignment = 1
 
 [node name="EndlessModeButton" type="Button" parent="EndScreens/VictoryScreen/PanelContainer/MarginContainer/VBoxContainer" unique_id=1303244333]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
+theme_override_fonts/font = ExtResource("17_5tuhn")
+theme_override_font_sizes/font_size = 32
 text = "Endless Mode"
 
 [node name="InGameMenu" type="CanvasLayer" parent="." unique_id=797476415]

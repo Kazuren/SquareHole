@@ -1,78 +1,83 @@
-[gd_scene load_steps=5 format=3 uid="uid://ydxs6t7po8h4"]
+[gd_scene format=3 uid="uid://mainmenu0001"]
 
 [ext_resource type="Script" uid="uid://cilb86hopk6v2" path="res://main_menu.gd" id="1_main"]
+[ext_resource type="FontFile" uid="uid://7myofhlchhg7" path="res://Fonts/VT323-Regular.ttf" id="2_h7a2f"]
 [ext_resource type="Texture2D" uid="uid://cer1fxgot4ka4" path="res://Art/Cover/squareHoleCover.png" id="2_qoqlk"]
-[ext_resource type="PackedScene" path="res://SettingsPopup.tscn" id="2_sp"]
+[ext_resource type="PackedScene" uid="uid://er6um4de2hsa" path="res://SettingsPopup.tscn" id="2_sp"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_title"]
 font_size = 64
 
-[node name="MainMenu" type="Control"]
+[node name="MainMenu" type="Control" unique_id=71170604]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 624.0
-offset_top = 488.0
-offset_right = 624.0
-offset_bottom = 488.0
 grow_horizontal = 2
 grow_vertical = 2
-scale = Vector2(2, 2)
 script = ExtResource("1_main")
 
-[node name="TextureRect" type="TextureRect" parent="."]
-layout_mode = 0
-offset_left = -312.5
-offset_top = -243.0
-offset_right = 648.0
-offset_bottom = 550.5
+[node name="TextureRect" type="TextureRect" parent="." unique_id=363715549]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 texture = ExtResource("2_qoqlk")
 stretch_mode = 4
 
-[node name="MainMenuPanel" type="VBoxContainer" parent="."]
+[node name="MainMenuPanel" type="VBoxContainer" parent="." unique_id=722089195]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 320)
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -935.5
-offset_top = -607.5
-offset_right = -642.5
-offset_bottom = -284.5
+offset_left = -149.25
+offset_top = -266.75
+offset_right = 149.25
+offset_bottom = 266.75
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/separation = 16
 alignment = 1
 
-[node name="TitleLabel" type="Label" parent="MainMenuPanel"]
+[node name="TitleLabel" type="Label" parent="MainMenuPanel" unique_id=1521236538]
 visible = false
 layout_mode = 2
 text = "Square Hole"
 label_settings = SubResource("LabelSettings_title")
 horizontal_alignment = 1
 
-[node name="PlayButton" type="Button" parent="MainMenuPanel"]
+[node name="PlayButton" type="Button" parent="MainMenuPanel" unique_id=1592007393]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 48)
 layout_mode = 2
+theme_override_fonts/font = ExtResource("2_h7a2f")
+theme_override_font_sizes/font_size = 32
 text = "Play"
 
-[node name="SettingsButton" type="Button" parent="MainMenuPanel"]
+[node name="SettingsButton" type="Button" parent="MainMenuPanel" unique_id=1613806073]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 48)
 layout_mode = 2
+theme_override_fonts/font = ExtResource("2_h7a2f")
+theme_override_font_sizes/font_size = 32
 text = "Settings"
 
-[node name="ExitButton" type="Button" parent="MainMenuPanel"]
+[node name="ExitButton" type="Button" parent="MainMenuPanel" unique_id=486879590]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 48)
 layout_mode = 2
+theme_override_fonts/font = ExtResource("2_h7a2f")
+theme_override_font_sizes/font_size = 32
 text = "Exit"
 
-[node name="SettingsPopup" parent="." instance=ExtResource("2_sp")]
+[node name="SettingsPopup" parent="." unique_id=1552720111 instance=ExtResource("2_sp")]
 unique_name_in_owner = true
 visible = false
 layout_mode = 1

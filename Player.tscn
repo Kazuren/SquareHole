@@ -21,7 +21,7 @@ cast_shadow = 0
 mesh = null
 script = ExtResource("2_kpjcp")
 PLAYER_WALK_SPEED_PER_SECOND = 3.0
-PLAYER_RUN_SPEED_PER_SECOND = 5.0
+PLAYER_RUN_SPEED_PER_SECOND = 5.2
 shapes = Array[ExtResource("3_cxr5p")]([ExtResource("4_tdg3f"), ExtResource("7_dtqjt"), ExtResource("6_tdg3f"), ExtResource("5_dtqjt")])
 
 [node name="CollisionShape2D" parent="." index="0" unique_id=976849342]

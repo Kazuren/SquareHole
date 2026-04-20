@@ -1,9 +1,12 @@
 [gd_scene format=3 uid="uid://cqqx5yicm0l24"]
 
+[ext_resource type="FontFile" uid="uid://7myofhlchhg7" path="res://Fonts/VT323-Regular.ttf" id="1_grsi4"]
+
 [node name="Label" type="Label3D" unique_id=1495655536]
 pixel_size = 0.001
 no_depth_test = true
 fixed_size = true
 outline_modulate = Color(0, 0, 0, 0)
 text = "50%!"
+font = ExtResource("1_grsi4")
 font_size = 64

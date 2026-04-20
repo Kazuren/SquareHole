@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://er6um4de2hsa"]
 
-[ext_resource type="Script" path="res://settings_popup.gd" id="1_sp"]
+[ext_resource type="Script" uid="uid://ccvnsnk7emtr7" path="res://settings_popup.gd" id="1_sp"]
+[ext_resource type="FontFile" uid="uid://7myofhlchhg7" path="res://Fonts/VT323-Regular.ttf" id="2_qcyvy"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_popup"]
 bg_color = Color(0.1, 0.1, 0.13, 0.95)
@@ -14,16 +15,24 @@ corner_radius_top_right = 8
 corner_radius_bottom_right = 8
 corner_radius_bottom_left = 8
 
-[node name="SettingsPopup" type="Control"]
-script = ExtResource("1_sp")
+[sub_resource type="LabelSettings" id="LabelSettings_suvqx"]
+font = ExtResource("2_qcyvy")
+font_size = 32
+
+[sub_resource type="LabelSettings" id="LabelSettings_qcyvy"]
+font = ExtResource("2_qcyvy")
+font_size = 32
+
+[node name="SettingsPopup" type="Control" unique_id=201244713]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_sp")
 
-[node name="ColorRect" type="ColorRect" parent="."]
+[node name="ColorRect" type="ColorRect" parent="." unique_id=740912122]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -32,7 +41,7 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0, 0, 0, 0.6)
 
-[node name="PanelContainer" type="PanelContainer" parent="."]
+[node name="PanelContainer" type="PanelContainer" parent="." unique_id=889893769]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -47,27 +56,29 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_popup")
 
-[node name="MarginContainer" type="MarginContainer" parent="PanelContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="PanelContainer" unique_id=257870021]
 layout_mode = 2
 theme_override_constants/margin_left = 24
 theme_override_constants/margin_top = 24
 theme_override_constants/margin_right = 24
 theme_override_constants/margin_bottom = 24
 
-[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/MarginContainer" unique_id=1745422546]
 layout_mode = 2
 theme_override_constants/separation = 12
 
-[node name="TitleLabel" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer"]
+[node name="TitleLabel" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer" unique_id=1388300204]
 layout_mode = 2
 text = "Settings"
+label_settings = SubResource("LabelSettings_suvqx")
 horizontal_alignment = 1
 
-[node name="MasterLabel" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer"]
+[node name="MasterLabel" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer" unique_id=129343809]
 layout_mode = 2
 text = "Master"
+label_settings = SubResource("LabelSettings_qcyvy")
 
-[node name="MasterSlider" type="HSlider" parent="PanelContainer/MarginContainer/VBoxContainer"]
+[node name="MasterSlider" type="HSlider" parent="PanelContainer/MarginContainer/VBoxContainer" unique_id=1385149466]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 32)
 layout_mode = 2
@@ -75,8 +86,10 @@ max_value = 1.0
 step = 0.01
 value = 1.0
 
-[node name="SettingsBackButton" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer"]
+[node name="SettingsBackButton" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer" unique_id=1169892934]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
+theme_override_fonts/font = ExtResource("2_qcyvy")
+theme_override_font_sizes/font_size = 32
 text = "Back"
