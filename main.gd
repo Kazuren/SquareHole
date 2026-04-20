@@ -9,20 +9,12 @@ extends Node3D
 #THINGS TO FIX:
 
 # fairness of game, way to spawn objects in a more fair way
-# sounds: 100% match, 0% match, 100->50% lessen pitch, 49->0% lessen pitch
-# more shapes
-
-
 # add gravity field concept to pull far away objects closer to player (we set a min distance away from player) for fairness
-# game over/win screen(after 20 minutes?)
+
+# sounds: 100% match, 0% match, 100->50% lessen pitch, 49->0% lessen pitch
 # main menu
 
 # distortion as player loses sanity?
-# protagonist texture near sanity bar, change texture on sanity change
-# export prefixed sanity levels with an associated texture
-
-# set rotation steps for each object specifically and for each player shape as well, so that for example the square only has 0 deg and 45 deg
-# similarly for star etc.
 
 # maybe switch from curved to linear score formula as game progresses to aid in difficulty scaling?
 
@@ -34,16 +26,20 @@ extends Node3D
 
 
 @onready var player: ShapeEntity = $Player
+@onready var end_screens: EndScreens = $EndScreens
 
 @export var enemy_scenes: Array[PackedEnemy]
 
 
-var starting_time_ticks: int
+# Integer physics-frame counter so elapsed time is exact and pauses with the tree.
+var elapsed_physics_frames: int = 0
+var endless_mode: bool = false
+var game_ended: bool = false
 
-const GAME_DURATION: float = 1200.0 # 20 minutes in seconds
+@export var game_duration: float = 1200.0 # seconds
 
 var SANITY_MULTIPLIER: float = 0.05 # in percent
-@export var sanity_penalty_curve: Curve # X: 0-1 (time over 20 min), Y: penalty multiplier
+@export var sanity_penalty_curve: Curve # X: 0-1 (progress over game_duration), Y: penalty multiplier
 @export_range(0.1, 1.0, 0.05) var enemy_shape_scale: float = 1.0
 @export_range(0.0, 5.0, 0.1) var magnet_radius: float = 0.2
 @export_range(0.0, 10.0, 0.1) var magnet_strength: float = 3.0
@@ -76,11 +72,11 @@ func render_sanity() -> void:
 	render_girl_sanity_expression($%SanityBar.value)
 	
 func get_elapsed_seconds() -> float:
-	return (Time.get_ticks_msec() - starting_time_ticks) / 1000.0
+	return elapsed_physics_frames / float(Engine.physics_ticks_per_second)
 
 
 func get_game_progress() -> float:
-	return clamp(get_elapsed_seconds() / GAME_DURATION, 0.0, 1.0)
+	return clamp(get_elapsed_seconds() / game_duration, 0.0, 1.0)
 
 
 func get_sanity_penalty_multiplier() -> float:
@@ -109,6 +105,8 @@ func calculate_sanity_change(score_base: float, formula: SanityFormula = SanityF
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	# Reset sanity on game restart
+	GameStats.sanity = 1.0
 	render_sanity()
 
 	rng.seed = 42
@@ -116,10 +114,11 @@ func _ready() -> void:
 	print_enemy_spawn_probabilities()
 	print_enemy_rotation_probabilities()
 
-	starting_time_ticks = Time.get_ticks_msec()
-
 	Engine.time_scale = 1
 	$SpawnTimer.timeout.connect(_on_timer_timeout)
+
+	end_screens.retry_pressed.connect(_on_retry_pressed)
+	end_screens.endless_mode_pressed.connect(_on_endless_mode_pressed)
 
 
 func update_timer() -> void:
@@ -162,10 +161,38 @@ func spawn_enemy() -> void:
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta: float) -> void:
 	update_timer()
-	pass
+	check_end_conditions()
+
+
+func check_end_conditions() -> void:
+	if game_ended:
+		return
+	if GameStats.sanity <= 0.0:
+		game_ended = true
+		get_tree().paused = true
+		end_screens.show_game_over()
+		return
+	if not endless_mode and get_elapsed_seconds() >= game_duration:
+		game_ended = true
+		get_tree().paused = true
+		end_screens.show_victory()
+
+
+func _on_retry_pressed() -> void:
+	get_tree().paused = false
+	get_tree().reload_current_scene()
+
+
+func _on_endless_mode_pressed() -> void:
+	endless_mode = true
+	game_ended = false
+	get_tree().paused = false
+	end_screens.hide_all()
 
 
 func _physics_process(delta: float) -> void:
+	elapsed_physics_frames += 1
+
 	# Pull player toward nearest enemy's ground position when idle
 	if not player.is_moving and enemies.size() > 0:
 		var closest_dist: float = INF
@@ -345,9 +372,9 @@ func print_enemy_spawn_probabilities() -> void:
 		header += "| %10s " % enemy_name
 	print(header)
 
-	var total_minutes := int(GAME_DURATION / 60.0)
+	var total_minutes := int(game_duration / 60.0)
 	for minute in range(total_minutes + 1):
-		var progress: float = clamp((minute * 60.0) / GAME_DURATION, 0.0, 1.0)
+		var progress: float = clamp((minute * 60.0) / game_duration, 0.0, 1.0)
 
 		var weights: Array[float] = []
 		var total: float = 0.0
@@ -369,7 +396,7 @@ func print_enemy_rotation_probabilities() -> void:
 	if enemy_scenes.is_empty():
 		return
 
-	var total_minutes := int(GAME_DURATION / 60.0)
+	var total_minutes := int(game_duration / 60.0)
 	for pack in enemy_scenes:
 		if not pack:
 			continue
@@ -388,7 +415,7 @@ func print_enemy_rotation_probabilities() -> void:
 		print(header)
 
 		for minute in range(total_minutes + 1):
-			var progress: float = clamp((minute * 60.0) / GAME_DURATION, 0.0, 1.0)
+			var progress: float = clamp((minute * 60.0) / game_duration, 0.0, 1.0)
 
 			var weights: Array[float] = []
 			var total: float = 0.0
